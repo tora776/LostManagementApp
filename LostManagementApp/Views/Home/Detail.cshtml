@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@model LostManagementApp.Models.Lost
+<script src="~/ts/lost.js"></script>
+<div class="container mt-4">
+    <h2>紛失物詳細画面</h2>
+
+    <!-- 検索フォーム -->
+    <form id="loginForm">
+        <div>
+            <label for="lostId">紛失ID:1</label>
+        </div>
+        <div>
+            <label for="isFound">紛失ステータス:</label>
+            <input type="text" id="isFound" name="isFound" required />
+        </div>
+        <div>
+            <label for="lostItem">なくしたもの:</label>
+            <input type="text" id="lostItem" name="lostItem" required />
+        </div>
+        <div>
+            <label for="lostPlace">なくした場所:</label>
+            <input type="text" id="lostPlace" name="lostPlace" required />
+        </div>
+        <div>
+            <label for="lostDetailedPlace">なくした詳細な場所:</label>
+            <input type="text" id="lostDetailedPlace" name="lostDetailedPlace" required />
+        </div>
+        <div>
+            <label for="registrateDate">登録日時:</label>
+            <input type="text" id="registrateDate" name="registrateDate" required />
+        </div>
+        <div>
+            <label for="updateDate">更新日時:</label>
+            <input type="text" id="updateDate" name="updateDate" required />
+        </div>
+        <button type="submit">更新</button>
+    </form>
+    <div id="loginError" style="color:red;display:none;">更新に失敗しました。</div>
+</div>

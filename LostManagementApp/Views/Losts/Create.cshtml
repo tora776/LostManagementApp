@@ -1,0 +1,72 @@
+﻿@model LostManagementApp.Models.Lost
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Lost</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="UserId" class="control-label"></label>
+                <select asp-for="UserId" class ="form-control" asp-items="ViewBag.UserId"></select>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsFound" /> @Html.DisplayNameFor(model => model.IsFound)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="LostDate" class="control-label"></label>
+                <input asp-for="LostDate" class="form-control" />
+                <span asp-validation-for="LostDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FoundDate" class="control-label"></label>
+                <input asp-for="FoundDate" class="form-control" />
+                <span asp-validation-for="FoundDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LostItem" class="control-label"></label>
+                <input asp-for="LostItem" class="form-control" />
+                <span asp-validation-for="LostItem" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LostPlace" class="control-label"></label>
+                <input asp-for="LostPlace" class="form-control" />
+                <span asp-validation-for="LostPlace" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LostDetailedPlace" class="control-label"></label>
+                <input asp-for="LostDetailedPlace" class="form-control" />
+                <span asp-validation-for="LostDetailedPlace" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RegistrateDate" class="control-label"></label>
+                <input asp-for="RegistrateDate" class="form-control" />
+                <span asp-validation-for="RegistrateDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UpdateDate" class="control-label"></label>
+                <input asp-for="UpdateDate" class="form-control" />
+                <span asp-validation-for="UpdateDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

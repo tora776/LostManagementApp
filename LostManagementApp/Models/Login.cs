@@ -15,7 +15,6 @@ namespace LostManagementApp.Models
         /// <summary>
         /// ユーザーID
         /// </summary>
-        // TODO: FK作成
         [Column("user_id")]
         public int UserId { get; set; }
         /// <summary>

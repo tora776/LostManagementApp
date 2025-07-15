@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using LostManagementApp.DatabaseContext;
+using LostManagementApp.Dao;
+using LostManagementApp.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +12,8 @@ builder.Services.AddControllersWithViews();
 // DBˆË‘¶ŠÖŒW’Ç‰Á
 builder.Services.AddDbContext<LostContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<ILostDao, LostDao>();
+builder.Services.AddScoped<LostService>();
 
 var app = builder.Build();
 
@@ -30,7 +34,7 @@ app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
+    pattern: "{controller=Home}/{action=Lost}/{id?}")
     .WithStaticAssets();
 
 

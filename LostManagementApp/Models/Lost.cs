@@ -31,7 +31,7 @@ namespace LostManagementApp.Models
         /// 発見日
         /// </summary>
         [Column("found_date")]
-        public DateTime FoundDate { get; set; }
+        public DateTime? FoundDate { get; set; }
         /// <summary>
         /// 紛失物
         /// </summary>
@@ -51,11 +51,11 @@ namespace LostManagementApp.Models
         /// 登録日
         /// </summary>
         [Column("registrate_date")]
-        public DateTime RegistrateDate { get; set; }
+        public DateTime? RegistrateDate { get; set; }
         /// <summary>
         /// 更新日
         /// </summary>
         [Column("update_date")]
-        public DateTime UpdateDate { get; set; }
+        public DateTime? UpdateDate { get; set; }
     }
 }

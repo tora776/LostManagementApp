@@ -1,0 +1,66 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@model List<LostManagementApp.Models.Lost>
+<script src="~/ts/lost.js"></script>
+<div class="container mt-4">
+    <h2>なくしものメモ</h2>
+    <p>紛失物・紛失した場所・紛失した詳細な場所を記録するためのアプリです。</p>
+
+    <!-- 検索フォーム -->
+    <div class="card p-3 mb-3">
+        <div class="d-flex align-items-center mb-2">
+            <button class="btn btn-primary search-button" id="search-button">検索</button>
+            <button class="btn btn-secondary" id="insert-button"><i class="bi bi-plus-lg"></i>追加</button>
+        </div>
+        <div class="mb-2">
+            <label for="lostItem" class="form-label">なくしたもの</label>
+            <input type="text" class="form-control" id="lostItem">
+        </div>
+        <div class="mb-2">
+            <label for="lostPlace" class="form-label">なくした場所</label>
+            <input type="text" class="form-control" id="lostPlace">
+        </div>
+        <div class="mb-2">
+            <label for="lostDetail" class="form-label">なくした詳細な場所</label>
+            <input type="text" class="form-control" id="lostDetail">
+        </div>
+    </div>
+
+    <!-- 検索結果テーブル -->
+    <div class="card p-3">
+        <div class="d-flex mb-2">
+            <button class="btn btn-secondary me-2" id="update-button"><i class="bi bi-pencil">更新</i></button>
+            <button class="btn btn-secondary" id="delete-button"><i class="bi bi-bar-chart"></i>削除</button>
+        </div>
+        <table class="table table-bordered text-center">
+            <thead class="table-light">
+                <tr>
+                    <th>チェック</th>
+                    <th>紛失ID</th>
+                    <th>なくした日付</th>
+                    <th>見つけた日付</th>
+                    <th>なくしたもの</th>
+                    <th>なくした場所</th>
+                    <th>なくした詳細な場所</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    int index = @Model.IndexOf(item); // インデックスを計算
+                    <tr>
+                        <td><input type="checkbox" value=@item.LostId></td>
+                        <td>@(index + 1)</td>
+                        <td>@(item.LostDate.ToString("yyyy/MM/dd") ?? "")</td>
+                        <td>@(item.FoundDate?.ToString("yyyy/MM/dd") ?? "")</td>
+                        <td>@item.LostItem</td>
+                        <td>@item.LostPlace</td>
+                        <td>@item.LostDetailedPlace</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
