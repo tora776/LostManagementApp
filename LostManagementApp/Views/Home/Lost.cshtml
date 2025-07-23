@@ -3,29 +3,42 @@
 }
 
 @model List<LostManagementApp.Models.Lost>
-<script src="~/ts/lost.js"></script>
+<script src="~/js/lost.js"></script>
 <div class="container mt-4">
     <h2>なくしものメモ</h2>
     <p>紛失物・紛失した場所・紛失した詳細な場所を記録するためのアプリです。</p>
 
     <!-- 検索フォーム -->
+    
+    
     <div class="card p-3 mb-3">
-        <div class="d-flex align-items-center mb-2">
-            <button class="btn btn-primary search-button" id="search-button">検索</button>
-            <button class="btn btn-secondary" id="insert-button"><i class="bi bi-plus-lg"></i>追加</button>
-        </div>
-        <div class="mb-2">
-            <label for="lostItem" class="form-label">なくしたもの</label>
-            <input type="text" class="form-control" id="lostItem">
-        </div>
-        <div class="mb-2">
-            <label for="lostPlace" class="form-label">なくした場所</label>
-            <input type="text" class="form-control" id="lostPlace">
-        </div>
-        <div class="mb-2">
-            <label for="lostDetail" class="form-label">なくした詳細な場所</label>
-            <input type="text" class="form-control" id="lostDetail">
-        </div>
+        <details open>
+            <summary>検索・追加</summary>
+                <div class="d-flex align-items-center mb-2">
+                    <button class="btn btn-primary search-button" id="search-button">検索</button>
+                    <button class="btn btn-secondary" id="insert-button"><i class="bi bi-plus-lg"></i>追加</button>
+                </div>
+                <div class="mb-2">
+                    <label for="lostDate" class="control-label">なくした日付</label>
+                    <input for="lostDate" class="form-control" id="lostDate" />
+                </div>
+                <div class="mb-2">
+                    <label for="foundDate" class="control-label">見つけた日付</label>
+                    <input for="foundDate" class="form-control" id="foundDate" />
+                </div>
+                <div class="mb-2">
+                    <label for="lostItem" class="form-label">なくしたもの</label>
+                    <input type="text" class="form-control" id="lostItem">
+                </div>
+                <div class="mb-2">
+                    <label for="lostPlace" class="form-label">なくした場所</label>
+                    <input type="text" class="form-control" id="lostPlace">
+                </div>
+                <div class="mb-2">
+                    <label for="lostDetail" class="form-label">なくした詳細な場所</label>
+                    <input type="text" class="form-control" id="lostDetail">
+                </div>
+        </details>
     </div>
 
     <!-- 検索結果テーブル -->
@@ -53,7 +66,7 @@
                     <tr>
                         <td><input type="checkbox" value=@item.LostId></td>
                         <td>@(index + 1)</td>
-                        <td>@(item.LostDate.ToString("yyyy/MM/dd") ?? "")</td>
+                        <td>@(item.LostDate?.ToString("yyyy/MM/dd") ?? "")</td>
                         <td>@(item.FoundDate?.ToString("yyyy/MM/dd") ?? "")</td>
                         <td>@item.LostItem</td>
                         <td>@item.LostPlace</td>
@@ -64,3 +77,9 @@
         </table>
     </div>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

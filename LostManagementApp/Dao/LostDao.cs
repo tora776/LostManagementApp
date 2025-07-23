@@ -15,14 +15,42 @@ namespace LostManagementApp.Dao
         /// <summary>
         /// 紛失物を取得する
         /// </summary>
-        /// <param name="lost">
+        /// <param name="lost">検索条件</param>
         /// TODO:ユーザーID,紛失物,紛失場所,紛失した詳細な場所が指定されている場合は、該当する紛失物を取得する
         public List<Lost> GetLost(Lost lost)
         {
-            List<Lost> losts = _context.Lost
-                // .Where(x => x.UserId == lost.UserId && x.LostItem == lost.LostItem && x.LostPlace == lost.LostPlace && x.LostDetailedPlace == lost.LostDetailedPlace)
-                .ToList();
-            return losts;
+            var query = _context.Lost.AsQueryable();
+            // UserIdは必須
+            query = query.Where(x => x.UserId == lost.UserId);
+
+            // nullまたは空でなければ条件を追加
+            if (!string.IsNullOrEmpty(lost.LostDate?.ToString("yyyy/MM/dd")))
+            {
+                query = query.Where(x => x.LostDate == lost.LostDate);
+            }
+
+            // nullまたは空でなければ条件を追加
+            if (!string.IsNullOrEmpty(lost.FoundDate?.ToString("yyyy/MM/dd")))
+            {
+                query = query.Where(x => x.FoundDate == lost.FoundDate);
+            }
+
+            if (!string.IsNullOrEmpty(lost.LostItem))
+            {
+                query = query.Where(x => x.LostItem == lost.LostItem);
+            }
+
+            if (!string.IsNullOrEmpty(lost.LostPlace))
+            {
+                query = query.Where(x => x.LostPlace == lost.LostPlace);
+            }
+
+            if (!string.IsNullOrEmpty(lost.LostDetailedPlace))
+            {
+                query = query.Where(x => x.LostDetailedPlace == lost.LostDetailedPlace);
+            }
+            
+            return query.ToList();
         }
 
         /// <summary>
@@ -33,6 +61,8 @@ namespace LostManagementApp.Dao
         {
             lost.RegistrateDate = DateTime.UtcNow;
             lost.UpdateDate = DateTime.UtcNow;
+            // LostIdの最大値 + 1を取得
+            lost.LostId = GetMaxLostId();
             _context.Lost.Add(lost);
             _context.SaveChanges();
         }
@@ -57,6 +87,16 @@ namespace LostManagementApp.Dao
             lost.UpdateDate = DateTime.UtcNow;
             _context.Lost.Where(x => x.LostId == lost.LostId).ExecuteDelete();
             _context.SaveChanges();
+        }
+
+        /// <summary>
+        /// 紛失IDの最大値を取得する
+        /// </summary>
+        public int GetMaxLostId()
+        {
+            int maxLostId = _context.Lost
+                .Select(x => x.LostId).Max();
+            return maxLostId + 1;
         }
     }
 }

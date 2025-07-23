@@ -18,7 +18,7 @@ namespace LostManagementApp.Controllers
             _lostService = lostService;
 
         }
-
+        
         public IActionResult Lost()
         {
             // TODO:ÉÜÅ[ÉUÅ[IDÇé©ìÆéÊìæ
@@ -26,6 +26,8 @@ namespace LostManagementApp.Controllers
             List<Lost> Losts = _lostService.GetLost(new Lost
             {
                 UserId = 1,
+                LostDate = null,
+                FoundDate = null,
                 LostItem = "",
                 LostPlace = "",
                 LostDetailedPlace = ""

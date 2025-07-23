@@ -10,11 +10,11 @@ using LostManagementApp.Models;
 
 namespace LostManagementApp.Controllers
 {
-    public class LostController : Controller
+    public class LostsController : Controller
     {
         private readonly LostContext _context;
 
-        public LostController(LostContext context)
+        public LostsController(LostContext context)
         {
             _context = context;
         }

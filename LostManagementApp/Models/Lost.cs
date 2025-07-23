@@ -26,7 +26,7 @@ namespace LostManagementApp.Models
         /// 紛失日
         /// </summary>
         [Column("lost_date")]
-        public DateTime LostDate { get; set; }
+        public DateTime? LostDate { get; set; }
         /// <summary>
         /// 発見日
         /// </summary>
