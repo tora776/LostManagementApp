@@ -52,6 +52,7 @@
                 <tr>
                     <th>チェック</th>
                     <th>紛失ID</th>
+                    <th>詳細</th>
                     <th>なくした日付</th>
                     <th>見つけた日付</th>
                     <th>なくしたもの</th>
@@ -66,6 +67,7 @@
                     <tr>
                         <td><input type="checkbox" value=@item.LostId></td>
                         <td>@(index + 1)</td>
+                        <td>@Html.ActionLink("●", "Detail", "Home")</td>
                         <td>@(item.LostDate?.ToString("yyyy/MM/dd") ?? "")</td>
                         <td>@(item.FoundDate?.ToString("yyyy/MM/dd") ?? "")</td>
                         <td>@item.LostItem</td>

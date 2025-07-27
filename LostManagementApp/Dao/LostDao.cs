@@ -13,11 +13,26 @@ namespace LostManagementApp.Dao
         }
 
         /// <summary>
-        /// 紛失物を取得する
+        /// 詳細画面遷移時、紛失物を取得する
         /// </summary>
         /// <param name="lost">検索条件</param>
         /// TODO:ユーザーID,紛失物,紛失場所,紛失した詳細な場所が指定されている場合は、該当する紛失物を取得する
-        public List<Lost> GetLost(Lost lost)
+        public Lost GetLost(int LostId)
+        {
+            var LostData = _context.Lost
+                .Where(x => x.LostId == LostId)
+                .FirstOrDefault()
+                ?? new Lost { LostId = -1};
+
+            return LostData;
+        }
+
+        /// <summary>
+        /// アプリ起動時・検索処理時に紛失物を取得する
+        /// </summary>
+        /// <param name="lost">検索条件</param>
+        /// TODO:ユーザーID,紛失物,紛失場所,紛失した詳細な場所が指定されている場合は、該当する紛失物を取得する
+        public List<Lost> GetLostList(Lost lost)
         {
             var query = _context.Lost.AsQueryable();
             // UserIdは必須
@@ -29,7 +44,6 @@ namespace LostManagementApp.Dao
                 query = query.Where(x => x.LostDate == lost.LostDate);
             }
 
-            // nullまたは空でなければ条件を追加
             if (!string.IsNullOrEmpty(lost.FoundDate?.ToString("yyyy/MM/dd")))
             {
                 query = query.Where(x => x.FoundDate == lost.FoundDate);

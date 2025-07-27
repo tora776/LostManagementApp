@@ -16,13 +16,13 @@ namespace LostManagementApp.Controllers
         }
 
         [HttpPost("GetLost")]
-        public IActionResult GetLost([FromBody] Lost lost)
+        public IActionResult GetLostList([FromBody] Lost lost)
         {
             if (lost == null)
             {
                 return BadRequest("Invalid lost item data.");
             }
-            var lostItems = _lostService.GetLost(lost);
+            var lostItems = _lostService.GetLostList(lost);
             if (lostItems == null || !lostItems.Any())
             {
                 return NotFound("No lost items found.");
@@ -38,7 +38,7 @@ namespace LostManagementApp.Controllers
                 return BadRequest("Invalid lost item data.");
             }
             _lostService.InsertLost(lost);
-            return CreatedAtAction(nameof(GetLost), new { id = lost.LostId }, lost);
+            return CreatedAtAction(nameof(GetLostList), new { id = lost.LostId }, lost);
         }
 
         [HttpPut("UpdateLost")]

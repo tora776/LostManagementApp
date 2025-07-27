@@ -23,7 +23,7 @@ namespace LostManagementApp.Controllers
         {
             // TODO:ユーザーIDを自動取得
             // 紛失物の条件指定はなし
-            List<Lost> Losts = _lostService.GetLost(new Lost
+            List<Lost> Losts = _lostService.GetLostList(new Lost
             {
                 UserId = 1,
                 LostDate = null,
@@ -38,6 +38,12 @@ namespace LostManagementApp.Controllers
         public IActionResult Privacy()
         {
             return View();
+        }
+
+        public IActionResult Detail(int LostId)
+        {
+            var LostData = _lostService.GetLost(LostId);
+            return View(LostData);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
