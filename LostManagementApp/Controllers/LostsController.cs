@@ -25,7 +25,16 @@ namespace LostManagementApp.Controllers
             return View(await _context.Lost.ToListAsync());
         }
 
+        // 検索処理実施後、JavaScriptで作成した表からDetailsメソッドを呼び出す
+        [HttpPost]
+        public IActionResult DetailPost(int lostId)
+        {
+            TempData["LostId"] = lostId;
+            return RedirectToAction("Details", new { id = lostId });
+        }
+
         // GET: Losts/Details/5
+        [HttpGet]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)

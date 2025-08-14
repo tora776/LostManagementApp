@@ -188,6 +188,16 @@ function createTable(data) {
         idCell.textContent = (index + 1).toString();
         row.appendChild(idCell);
         // 詳細列（●を表示）
+        const form = document.createElement("form");
+        form.method = "POST";
+        form.action = "/Lost/DetailPost"; // POST用アクション
+
+        const hiddenField = document.createElement("input");
+        hiddenField.type = "hidden";
+        hiddenField.name = "lostId";
+        hiddenField.value = lostId;
+        form.appendChild(hiddenField);
+
         const detailCell = document.createElement("td");
         detailCell.textContent = "●";
         row.appendChild(detailCell);
@@ -221,3 +231,18 @@ function formatDate(dateString) {
     return `${date.getFullYear()}/${(date.getMonth() + 1).toString().padStart(2, "0")}/${date.getDate().toString().padStart(2, "0")}`;
 }
 //# sourceMappingURL=lost.js.map
+
+function gotoDetail(lostId) {
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = "/Lost/DetailPost"; // POST用アクション
+
+    const hiddenField = document.createElement("input");
+    hiddenField.type = "hidden";
+    hiddenField.name = "lostId";
+    hiddenField.value = lostId;
+    form.appendChild(hiddenField);
+
+    document.body.appendChild(form);
+    form.submit();
+}
