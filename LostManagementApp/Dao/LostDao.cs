@@ -15,7 +15,7 @@ namespace LostManagementApp.Dao
         /// <summary>
         /// 詳細画面遷移時、紛失物を取得する
         /// </summary>
-        /// <param name="lost">検索条件</param>
+        /// <param name="LostId">紛失ID</param>
         /// TODO:ユーザーID,紛失物,紛失場所,紛失した詳細な場所が指定されている場合は、該当する紛失物を取得する
         public Lost GetLost(int LostId)
         {
@@ -30,7 +30,7 @@ namespace LostManagementApp.Dao
         /// <summary>
         /// アプリ起動時・検索処理時に紛失物を取得する
         /// </summary>
-        /// <param name="lost">検索条件</param>
+        /// <param name="lost">紛失物情報</param>
         /// TODO:ユーザーID,紛失物,紛失場所,紛失した詳細な場所が指定されている場合は、該当する紛失物を取得する
         public List<Lost> GetLostList(Lost lost)
         {

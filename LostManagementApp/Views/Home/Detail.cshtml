@@ -11,32 +11,34 @@
     <form id="loginForm">
         <div>
             <label for="lostId">紛失ID:</label>
-        </div>
-        <div>
-            <label for="isFound">紛失ステータス:</label>
-            <input type="text" id="isFound" name="isFound" required />
+            <input type="text" id="lostId" name="lostId" value="@Model.LostId" required disabled/>
         </div>
         <div>
             <label for="lostItem">なくしたもの:</label>
-            <input type="text" id="lostItem" name="lostItem" required />
+            <input type="text" id="lostItem" name="lostItem" value="@Model.LostItem" required />
         </div>
         <div>
             <label for="lostPlace">なくした場所:</label>
-            <input type="text" id="lostPlace" name="lostPlace" required />
+            <input type="text" id="lostPlace" name="lostPlace" value="@Model.LostPlace" required />
         </div>
         <div>
             <label for="lostDetailedPlace">なくした詳細な場所:</label>
-            <input type="text" id="lostDetailedPlace" name="lostDetailedPlace" required />
+            <input type="text" id="lostDetailedPlace" name="lostDetailedPlace" value="@Model.LostDetailedPlace" required />
         </div>
         <div>
-            <label for="registrateDate">登録日時:</label>
-            <input type="text" id="registrateDate" name="registrateDate" required />
+            <label for="registrateDate">なくした日付:</label>
+            <input type="text" id="lostDate" name="lostDate" value="@Model.LostDate?.ToString("yyyy/MM/dd")" required />
         </div>
         <div>
-            <label for="updateDate">更新日時:</label>
-            <input type="text" id="updateDate" name="updateDate" required />
+            <label for="isFound">紛失ステータス:</label>
+            <input type="checkbox" id="isFound" name="isFound" checked="@Model.IsFound" required />
         </div>
-        <button type="submit">更新</button>
+        <div>
+            <label for="updateDate">見つけた日付:</label>
+            <input type="text" id="foundDate" name="foundDate" value="@Model.FoundDate?.ToString("yyyy/MM/dd")" required />
+        </div>
+        <button type="button" id="update-button">更新</button>
+        <button type="button" id="delete-button">削除</button>
     </form>
     <div id="loginError" style="color:red;display:none;">更新に失敗しました。</div>
 </div>

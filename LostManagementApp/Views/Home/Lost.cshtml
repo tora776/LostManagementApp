@@ -67,7 +67,7 @@
                     <tr>
                         <td><input type="checkbox" value=@item.LostId></td>
                         <td>@(index + 1)</td>
-                        <td>@Html.ActionLink("●", "Detail", "Home")</td>
+                        <td>@Html.ActionLink("●", "Detail", "Home", new { lostId = item.LostId}, -1)</td>
                         <td>@(item.LostDate?.ToString("yyyy/MM/dd") ?? "")</td>
                         <td>@(item.FoundDate?.ToString("yyyy/MM/dd") ?? "")</td>
                         <td>@item.LostItem</td>

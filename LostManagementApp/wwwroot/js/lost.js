@@ -187,6 +187,10 @@ function createTable(data) {
         const idCell = document.createElement("td");
         idCell.textContent = (index + 1).toString();
         row.appendChild(idCell);
+        // 詳細列（●を表示）
+        const detailCell = document.createElement("td");
+        detailCell.textContent = "●";
+        row.appendChild(detailCell);
         // なくした日付列
         const lostDateCell = document.createElement("td");
         lostDateCell.textContent = item.lostDate ? formatDate(item.lostDate) : "";
