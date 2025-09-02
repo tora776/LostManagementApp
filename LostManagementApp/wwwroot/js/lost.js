@@ -195,54 +195,68 @@ function createTable(data) {
         const hiddenField = document.createElement("input");
         hiddenField.type = "hidden";
         hiddenField.name = "lostId";
-        hiddenField.value = lostId;
+        hiddenField.value = item.lostId.toString();
         form.appendChild(hiddenField);
 
         const detailCell = document.createElement("td");
-        detailCell.textContent = "●";
-        row.appendChild(detailCell);
-        // なくした日付列
-        const lostDateCell = document.createElement("td");
-        lostDateCell.textContent = item.lostDate ? formatDate(item.lostDate) : "";
-        row.appendChild(lostDateCell);
-        // 見つけた日付列
-        const foundDateCell = document.createElement("td");
-        foundDateCell.textContent = item.foundDate ? formatDate(item.foundDate) : "";
-        row.appendChild(foundDateCell);
-        // なくしたもの列
-        const lostItemCell = document.createElement("td");
-        lostItemCell.textContent = item.lostItem;
-        row.appendChild(lostItemCell);
-        // なくした場所列
-        const lostPlaceCell = document.createElement("td");
-        lostPlaceCell.textContent = item.lostPlace;
-        row.appendChild(lostPlaceCell);
-        // なくした詳細な場所列
-        const lostDetailedPlaceCell = document.createElement("td");
-        lostDetailedPlaceCell.textContent = item.lostDetailedPlace;
-        row.appendChild(lostDetailedPlaceCell);
-        // 行をテーブルに追加
-        tableBody.appendChild(row);
-    });
-}
+        const btn = document.createElement("span");
+        btn.textContent = "●";
+        btn.style.cursor = "pointer";
+        btn.addEventListener("click", () => __awaiter(this, void 0, void 0, function* () {
+                if (item.lostId === -1 || item.lostId === null) {
+                    alert("紛失IDが存在しません");
+                    return;
+                }
+                else {
+                    // サーバーに選択されたデータを送信
+                    const url = '@Url.Action("Detail", "Lost")' + `?lostId=${item.lostId}`;
+                    window.location.href = url;
+                }
+            }));
+            detailCell.appendChild(btn);
+            row.appendChild(detailCell);
+            // なくした日付列
+            const lostDateCell = document.createElement("td");
+            lostDateCell.textContent = item.lostDate ? formatDate(item.lostDate) : "";
+            row.appendChild(lostDateCell);
+            // 見つけた日付列
+            const foundDateCell = document.createElement("td");
+            foundDateCell.textContent = item.foundDate ? formatDate(item.foundDate) : "";
+            row.appendChild(foundDateCell);
+            // なくしたもの列
+            const lostItemCell = document.createElement("td");
+            lostItemCell.textContent = item.lostItem;
+            row.appendChild(lostItemCell);
+            // なくした場所列
+            const lostPlaceCell = document.createElement("td");
+            lostPlaceCell.textContent = item.lostPlace;
+            row.appendChild(lostPlaceCell);
+            // なくした詳細な場所列
+            const lostDetailedPlaceCell = document.createElement("td");
+            lostDetailedPlaceCell.textContent = item.lostDetailedPlace;
+            row.appendChild(lostDetailedPlaceCell);
+            // 行をテーブルに追加
+            tableBody.appendChild(row);
+        });
+    }
 // 日付を yyyy/MM/dd 形式にフォーマットする関数
 function formatDate(dateString) {
-    const date = new Date(dateString);
-    return `${date.getFullYear()}/${(date.getMonth() + 1).toString().padStart(2, "0")}/${date.getDate().toString().padStart(2, "0")}`;
-}
+            const date = new Date(dateString);
+            return `${date.getFullYear()}/${(date.getMonth() + 1).toString().padStart(2, "0")}/${date.getDate().toString().padStart(2, "0")}`;
+        }
 //# sourceMappingURL=lost.js.map
 
 function gotoDetail(lostId) {
-    const form = document.createElement("form");
-    form.method = "POST";
-    form.action = "/Lost/DetailPost"; // POST用アクション
+            const form = document.createElement("form");
+            form.method = "POST";
+            form.action = "/Lost/DetailPost"; // POST用アクション
 
-    const hiddenField = document.createElement("input");
-    hiddenField.type = "hidden";
-    hiddenField.name = "lostId";
-    hiddenField.value = lostId;
-    form.appendChild(hiddenField);
+            const hiddenField = document.createElement("input");
+            hiddenField.type = "hidden";
+            hiddenField.name = "lostId";
+            hiddenField.value = lostId;
+            form.appendChild(hiddenField);
 
-    document.body.appendChild(form);
-    form.submit();
-}
+            document.body.appendChild(form);
+            form.submit();
+        }
