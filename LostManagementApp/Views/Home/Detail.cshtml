@@ -3,7 +3,7 @@
 }
 
 @model LostManagementApp.Models.Lost
-<script src="~/ts/lost.js"></script>
+<script src="~/js/lost.js"></script>
 <div class="container mt-4">
     <h2>紛失物詳細画面</h2>
 
@@ -23,7 +23,7 @@
         </div>
         <div>
             <label for="lostDetailedPlace">なくした詳細な場所:</label>
-            <input type="text" id="lostDetailedPlace" name="lostDetailedPlace" value="@Model.LostDetailedPlace" required />
+            <input type="text" id="lostDetail" name="lostDetailedPlace" value="@Model.LostDetailedPlace" required />
         </div>
         <div>
             <label for="registrateDate">なくした日付:</label>

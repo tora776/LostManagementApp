@@ -103,18 +103,22 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener("DOMContentLoaded", function () {
     var _a;
     (_a = document.getElementById("update-button")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", () => __awaiter(this, void 0, void 0, function* () {
-        const selectedItems = getCheckLostId();
-        if (selectedItems.length === 0) {
-            alert("更新するデータを選択してください。");
-            return;
-        }
+        //const selectedItems = getCheckLostId();
+        //if (selectedItems.length === 0) {
+        //    alert("更新するデータを選択してください。");
+        //    return;
+        //}
+        // テキストボックスのデータを取得
+        var data = getLostTextValue();
+
+
         // サーバーに選択されたデータを送信
         const response = yield fetch("/LostApi/UpdateLost", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(selectedItems),
+            body: JSON.stringify(data),
         });
         if (response.ok) {
             // update.cshtmlに遷移
@@ -173,6 +177,10 @@ function createTable(data) {
     const tableBody = document.querySelector("table tbody");
     if (!tableBody)
         return;
+    // cshtmlで埋め込んだベースURLを取得
+    const config = document.getElementById("lost-config");
+    // const baseUrl = config.dataset.detailUrl;
+    const baseUrl = '/Home/Detail?lostId=1'
     // データをテーブルに追加
     data.forEach((item, index) => {
         const row = document.createElement("tr");
@@ -209,7 +217,7 @@ function createTable(data) {
                 }
                 else {
                     // サーバーに選択されたデータを送信
-                    const url = '@Url.Action("Detail", "Lost")' + `?lostId=${item.lostId}`;
+                    const url = `${baseUrl}` + `?lostId=${item.lostId}`;
                     window.location.href = url;
                 }
             }));
@@ -244,19 +252,44 @@ function formatDate(dateString) {
             const date = new Date(dateString);
             return `${date.getFullYear()}/${(date.getMonth() + 1).toString().padStart(2, "0")}/${date.getDate().toString().padStart(2, "0")}`;
         }
-//# sourceMappingURL=lost.js.map
 
-function gotoDetail(lostId) {
-            const form = document.createElement("form");
-            form.method = "POST";
-            form.action = "/Lost/DetailPost"; // POST用アクション
+function getLostTextValue() {
+    const lostId = document.getElementById("lostId").value;
+    const lostItem = document.getElementById("lostItem").value;
+    const lostPlace = document.getElementById("lostPlace").value;
+    const isFound = document.getElementById("isFound").checked;
+    const lostDetailedPlace = document.getElementById("lostDetail").value;
+    const lostDateValue = document.getElementById("lostDate").value ?? null;
+    const foundDateValue = document.getElementById("foundDate").value ?? null;
 
-            const hiddenField = document.createElement("input");
-            hiddenField.type = "hidden";
-            hiddenField.name = "lostId";
-            hiddenField.value = lostId;
-            form.appendChild(hiddenField);
 
-            document.body.appendChild(form);
-            form.submit();
-        }
+    // ISO8601形式に変換（空の場合はnull）
+    const lostDate = lostDateValue ? new Date(lostDateValue).toISOString() : null;
+    const foundDate = foundDateValue ? new Date(foundDateValue).toISOString() : null;
+
+    if (!lostItem || !lostPlace || !lostDetailedPlace) {
+        alert("全ての項目を入力してください。");
+        return;
+    }
+
+    // 日本時間でyyyy/MM/dd形式の文字列を生成
+    const jpDate = new Date();
+    const jpTime = jpDate.toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" });
+    const dateObj = new Date(jpTime);
+    const updateDate = `${dateObj.getFullYear()}/${(dateObj.getMonth() + 1).toString().padStart(2, "0")}/${dateObj.getDate().toString().padStart(2, "0")}`;
+
+    const data = {
+        LostId: parseInt(lostId),
+        UserId: 1,
+        IsFound: isFound,
+        LostDate: lostDate,
+        FoundDate: foundDate,
+        LostItem: lostItem,
+        LostPlace: lostPlace,
+        LostDetailedPlace: lostDetailedPlace,
+        RegistrateDate: null, 
+        UpdateDate: updateDate // yyyy/MM/dd形式
+    };
+
+    return data;
+}

@@ -41,7 +41,7 @@ namespace LostManagementApp.Controllers
             return CreatedAtAction(nameof(GetLostList), new { id = lost.LostId }, lost);
         }
 
-        [HttpPut("UpdateLost")]
+        [HttpPost("UpdateLost")]
         public IActionResult UpdateLost([FromBody] Lost lost)
         {
             if (lost == null || lost.LostId <= 0)
