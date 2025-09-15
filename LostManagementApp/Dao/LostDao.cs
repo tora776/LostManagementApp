@@ -63,7 +63,9 @@ namespace LostManagementApp.Dao
             {
                 query = query.Where(x => x.LostDetailedPlace == lost.LostDetailedPlace);
             }
-            
+
+            query.OrderBy(x => x.LostId);
+
             return query.ToList();
         }
 

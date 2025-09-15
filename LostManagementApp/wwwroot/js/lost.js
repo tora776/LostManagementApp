@@ -99,37 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
         location.reload();
     }));
 });
-// 更新ボタン押下時の処理
-document.addEventListener("DOMContentLoaded", function () {
-    var _a;
-    (_a = document.getElementById("update-button")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", () => __awaiter(this, void 0, void 0, function* () {
-        //const selectedItems = getCheckLostId();
-        //if (selectedItems.length === 0) {
-        //    alert("更新するデータを選択してください。");
-        //    return;
-        //}
-        // テキストボックスのデータを取得
-        var data = getLostTextValue();
 
-
-        // サーバーに選択されたデータを送信
-        const response = yield fetch("/LostApi/UpdateLost", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-        });
-        if (response.ok) {
-            // update.cshtmlに遷移
-            window.location.href = "/Update";
-        }
-        else {
-            console.error("Failed to send data to update page");
-            return;
-        }
-    }));
-});
 // 削除ボタン押下時の処理
 document.addEventListener("DOMContentLoaded", function () {
     var _a;
@@ -156,6 +126,24 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }));
 });
+
+// 詳細画面の発見ステータスチェックボックス押下時に、発見日の活性・非活性を切り替える
+document.addEventListener("DOMContentLoaded", function () {
+    var _a;
+    (_a = document.getElementById("isFound")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", () => __awaiter(this, void 0, void 0, function* () {
+        const isFound = document.getElementById("isFound").checked;
+        const input_foundDate = document.getElementById("foundDate");
+        // 発見済みのチェックボックスの値から、発見日の活性・非活性ステータスを切り替える
+        if (isFound) {
+            input_foundDate.disabled = false;
+        }
+        else {
+            input_foundDate.disabled = true;
+        }
+        }));
+});
+
+
 let lostList = []; // 起動時に取得したデータを保持
 // チェックボックスで選択された紛失物IDを取得する関数
 function getCheckLostId() {
@@ -180,7 +168,7 @@ function createTable(data) {
     // cshtmlで埋め込んだベースURLを取得
     const config = document.getElementById("lost-config");
     // const baseUrl = config.dataset.detailUrl;
-    const baseUrl = '/Home/Detail?lostId=1'
+    const baseUrl = '/Home/Detail'
     // データをテーブルに追加
     data.forEach((item, index) => {
         const row = document.createElement("tr");
@@ -247,51 +235,3 @@ function createTable(data) {
             tableBody.appendChild(row);
         });
     }
-// 日付を yyyy/MM/dd 形式にフォーマットする関数
-function formatDate(dateString) {
-            if (!dateString) return "";
-            const date = new Date(dateString);
-            return `${date.getFullYear()}/${(date.getMonth() + 1).toString().padStart(2, "0")}/${date.getDate().toString().padStart(2, "0")}`;
-        }
-
-function getLostTextValue() {
-    const lostId = document.getElementById("lostId").value;
-    const lostItem = document.getElementById("lostItem").value;
-    const lostPlace = document.getElementById("lostPlace").value;
-    const isFound = document.getElementById("isFound").checked;
-    const lostDetailedPlace = document.getElementById("lostDetail").value;
-    const lostDateValue = formatDate(document.getElementById("lostDate").value);
-    const foundDateValue = formatDate(document.getElementById("foundDate").value);
-    const updateDateValue = formatDate(new Date().toString());
-
-    // ISO8601形式に変換（空の場合はnull）
-    const lostDate = lostDateValue ? new Date(lostDateValue).toISOString() : null;
-    const foundDate = foundDateValue ? new Date(foundDateValue).toISOString() : null;
-    const updateDate = updateDateValue ? new Date(updateDateValue).toISOString() : null;
-
-    if (!lostItem || !lostPlace || !lostDetailedPlace) {
-        alert("全ての項目を入力してください。");
-        return;
-    }
-
-    // 日本時間でyyyy/MM/dd形式の文字列を生成
-    //const jpDate = new Date();
-    //const jpTime = jpDate.toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" });
-    //const dateObj = new Date(jpTime);
-    //const updateDate = `${dateObj.getFullYear()}/${(dateObj.getMonth() + 1).toString().padStart(2, "0")}/${dateObj.getDate().toString().padStart(2, "0")}`;
-
-    const data = {
-        LostId: parseInt(lostId),
-        UserId: 1,
-        IsFound: isFound,
-        LostDate: lostDate,
-        FoundDate: foundDate,
-        LostItem: lostItem,
-        LostPlace: lostPlace,
-        LostDetailedPlace: lostDetailedPlace,
-        RegistrateDate: null, 
-        UpdateDate: updateDate 
-    };
-
-    return data;
-}
