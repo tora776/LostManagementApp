@@ -11,20 +11,9 @@
 document.addEventListener("DOMContentLoaded", function () {
     var _a;
     (_a = document.getElementById("search-button")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", () => __awaiter(this, void 0, void 0, function* () {
-        const lostDate = new Date(document.getElementById("lostDate").value);
-        const foundDate = new Date(document.getElementById("foundDate").value);
-        const lostItem = document.getElementById("lostItem").value;
-        const lostPlace = document.getElementById("lostPlace").value;
-        const lostDetailedPlace = document.getElementById("lostDetail").value;
-        const data = {
-            UserId: 1,
-            IsFound: false,
-            LostDate: lostDate,
-            FoundDate: foundDate,
-            LostItem: lostItem,
-            LostPlace: lostPlace,
-            LostDetailedPlace: lostDetailedPlace,
-        };
+
+        const data = getLostSearchText();
+
         const response = yield fetch("/LostApi/GetLost", {
             method: "POST",
             headers: {
@@ -91,6 +80,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 return response.json();
             })
             .then(data => {
+                alert("追加が完了しました");
                 console.log("Insert successful:", data);
             })
             .catch(error => {
@@ -118,10 +108,11 @@ document.addEventListener("DOMContentLoaded", function () {
             body: JSON.stringify(selectedItems),
         });
         if (response.ok) {
+            alert("削除が完了しました");
             location.reload();
         }
         else {
-            console.error("Failed to send data to update page");
+            console.error("Failed to send data to delete page");
             return;
         }
     }));
@@ -235,3 +226,86 @@ function createTable(data) {
             tableBody.appendChild(row);
         });
     }
+
+// 検索条件を取得する関数
+function getLostSearchText() {
+    const lostItem = document.getElementById("lostItem").value;
+    const lostPlace = document.getElementById("lostPlace").value;
+    const lostDetailedPlace = document.getElementById("lostDetail").value;
+    const lostDateValue = formatDate(document.getElementById("lostDate").value);
+    const foundDateValue = formatDate(document.getElementById("foundDate").value);
+    var lostDate;
+    var foundDate;
+
+    if (lostDateValue) {
+        if (isNaN(new Date(lostDateValue).getTime())) {
+            alert("紛失日は日付形式で入力してください。");
+            return;
+        }
+        else {
+            // ISO8601形式に変換（空の場合はnull）
+            lostDate = lostDateValue ? new Date(lostDateValue).toISOString() : null;
+        }
+    }
+
+    if (foundDateValue) {
+        if (isNaN(new Date(foundDateValue).getTime())) {
+            alert("発見日は日付形式で入力してください。");
+            return;
+        }
+        else {
+            // ISO8601形式に変換（空の場合はnull）
+            foundDate = foundDateValue ? new Date(foundDateValue).toISOString() : null;
+        }
+    }
+
+    if (lostItem) {
+        if (lostItem.length > 100) {
+            alert("なくしたものは100文字以内で入力してください。");
+            return;
+        }
+    }
+
+    if (lostPlace) {
+        if (lostPlace.length > 100) {
+            alert("なくした場所は100文字以内で入力してください。");
+            return;
+        }
+    }
+
+    if (lostDetailedPlace) {
+        if (lostDetailedPlace.length > 100) {
+            alert("なくした詳細な場所は100文字以内で入力してください。");
+            return;
+        }
+    }
+
+    if (lostDate) {
+        if (lostDate > new Date().toISOString()) {
+            alert("紛失日は未来の日付にできません。");
+            return;
+        };
+    }
+
+    if (foundDate) {
+        if (lostDate > new Date().toISOString()) {
+            alert("発見日は未来の日付にできません。");
+            return;
+        };
+    }
+
+    const data = {
+        LostId: 1,
+        UserId: 1,
+        IsFound: false,
+        LostDate: lostDate,
+        FoundDate: foundDate,
+        LostItem: lostItem,
+        LostPlace: lostPlace,
+        LostDetailedPlace: lostDetailedPlace,
+        RegistrateDate: null,
+        UpdateDate: null
+    };
+
+    return data;
+}

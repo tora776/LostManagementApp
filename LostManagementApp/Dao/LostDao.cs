@@ -98,10 +98,9 @@ namespace LostManagementApp.Dao
         /// 紛失物を削除する
         /// </summary>
         /// <param name="lost">紛失物情報</param>
-        public void DeleteLost(Lost lost)
+        public void DeleteLost(int lostId)
         {
-            lost.UpdateDate = DateTime.UtcNow;
-            _context.Lost.Where(x => x.LostId == lost.LostId).ExecuteDelete();
+            _context.Lost.Where(x => x.LostId == lostId).ExecuteDelete();
             _context.SaveChanges();
         }
 

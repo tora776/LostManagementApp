@@ -52,14 +52,17 @@ namespace LostManagementApp.Controllers
             return NoContent();
         }
 
-        [HttpDelete("DeleteLost")]
-        public IActionResult DeleteLost([FromBody] Lost lost)
+        [HttpPost("DeleteLost")]
+        public IActionResult DeleteLost([FromBody] int lostId)
         {
-            if (lost == null || lost.LostId <= 0)
+            /*
+            if (lostId == null || lost.LostId <= 0)
             {
                 return BadRequest("Invalid lost item data.");
             }
-            _lostService.DeleteLost(lost);
+            */
+            //var lost = _lostService.GetLost(lostId);
+            _lostService.DeleteLost(lostId);
             return NoContent();
         }
     }
