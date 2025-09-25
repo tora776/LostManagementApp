@@ -8,6 +8,22 @@
     });
 };
 
+// 詳細画面の発見ステータスチェックボックス押下時に、発見日の活性・非活性を切り替える
+document.addEventListener("DOMContentLoaded", function () {
+    var _a;
+    (_a = document.getElementById("isFound")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", () => __awaiter(this, void 0, void 0, function* () {
+        const isFound = document.getElementById("isFound").checked;
+        const input_foundDate = document.getElementById("foundDate");
+        // 発見済みのチェックボックスの値から、発見日の活性・非活性ステータスを切り替える
+        if (isFound) {
+            input_foundDate.disabled = false;
+        }
+        else {
+            input_foundDate.disabled = true;
+        }
+    }));
+});
+
 // 更新ボタン押下時の処理
 document.addEventListener("DOMContentLoaded", function () {
     var _a;

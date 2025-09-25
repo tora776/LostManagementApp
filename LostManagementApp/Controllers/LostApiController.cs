@@ -52,6 +52,20 @@ namespace LostManagementApp.Controllers
             return NoContent();
         }
 
+        [HttpPost("DeleteLostIds")]
+        public IActionResult DeleteLost([FromBody] List<int> lostIds)
+        {
+            /*
+            if (lostId == null || lost.LostId <= 0)
+            {
+                return BadRequest("Invalid lost item data.");
+            }
+            */
+            //var lost = _lostService.GetLost(lostId);
+            _lostService.DeleteLostIds(lostIds);
+            return NoContent();
+        }
+
         [HttpPost("DeleteLost")]
         public IActionResult DeleteLost([FromBody] int lostId)
         {

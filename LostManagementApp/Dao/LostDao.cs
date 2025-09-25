@@ -97,7 +97,17 @@ namespace LostManagementApp.Dao
         /// <summary>
         /// 紛失物を削除する
         /// </summary>
-        /// <param name="lost">紛失物情報</param>
+        /// <param name="lostIds">紛失IDのリスト</param>
+        public void DeleteLostIds(List<int> lostIds)
+        {
+            _context.Lost.Where(x => lostIds.Contains(x.LostId)).ExecuteDelete();
+            _context.SaveChanges();
+        }
+
+        /// <summary>
+        /// 紛失物を削除する
+        /// </summary>
+        /// <param name="lost">紛失ID</param>
         public void DeleteLost(int lostId)
         {
             _context.Lost.Where(x => x.LostId == lostId).ExecuteDelete();

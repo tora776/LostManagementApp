@@ -16,27 +16,29 @@
                     <button class="btn btn-primary search-button" id="search-button">検索</button>
                     <button class="btn btn-secondary" id="insert-button"><i class="bi bi-plus-lg"></i>追加</button>
                 </div>
-                <div class="mb-2">
-                    <label for="lostDate" class="control-label">なくした日付</label>
-                    <label for="lostDateError" class="control-label" >エラーメッセージ</label>
-                    <input for="lostDate" class="form-control" id="lostDate" />
-                </div>
-                <div class="mb-2">
-                    <label for="foundDate" class="control-label">見つけた日付</label>
-                    <input for="foundDate" class="form-control" id="foundDate" />
-                </div>
-                <div class="mb-2">
-                    <label for="lostItem" class="form-label">なくしたもの</label>
-                    <input type="text" class="form-control" id="lostItem">
-                </div>
-                <div class="mb-2">
-                    <label for="lostPlace" class="form-label">なくした場所</label>
-                    <input type="text" class="form-control" id="lostPlace">
-                </div>
-                <div class="mb-2">
-                    <label for="lostDetail" class="form-label">なくした詳細な場所</label>
-                    <input type="text" class="form-control" id="lostDetail">
-                </div>
+                <div id="search-error-message"></div>
+                <form id="search-form">
+                    <div class="mb-2">
+                        <label for="lostDate" class="control-label">紛失日</label>
+                        <input for="lostDate" class="form-control" id="lostDate" />
+                    </div>
+                    <div class="mb-2">
+                        <label for="foundDate" class="control-label">発見日</label>
+                        <input for="foundDate" class="form-control" id="foundDate" />
+                    </div>
+                    <div class="mb-2">
+                        <label for="lostItem" class="form-label">なくしたもの</label>
+                        <input type="text" class="form-control" id="lostItem">
+                    </div>
+                    <div class="mb-2">
+                        <label for="lostPlace" class="form-label">なくした場所</label>
+                        <input type="text" class="form-control" id="lostPlace">
+                    </div>
+                    <div class="mb-2">
+                        <label for="lostDetail" class="form-label">なくした詳細な場所</label>
+                        <input type="text" class="form-control" id="lostDetail">
+                    </div>
+                </form>
         </details>
     </div>
 
@@ -52,8 +54,8 @@
                     <th>チェック</th>
                     <th>紛失ID</th>
                     <th>詳細</th>
-                    <th>なくした日付</th>
-                    <th>見つけた日付</th>
+                    <th>紛失日</th>
+                    <th>発見日</th>
                     <th>なくしたもの</th>
                     <th>なくした場所</th>
                     <th>なくした詳細な場所</th>
@@ -62,10 +64,10 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                    int index = @Model.IndexOf(item); // インデックスを計算
+                    // int index = @Model.IndexOf(item); // インデックスを計算
                     <tr>
                         <td><input type="checkbox" value=@item.LostId></td>
-                        <td>@(index + 1)</td>
+                        <td>@item.LostId</td>
                         <td>@Html.ActionLink("●", "Detail", "Home", new { lostId = item.LostId}, -1)</td>
                         <td>@(item.LostDate?.ToString("yyyy/MM/dd") ?? "")</td>
                         <td>@(item.FoundDate?.ToString("yyyy/MM/dd") ?? "")</td>

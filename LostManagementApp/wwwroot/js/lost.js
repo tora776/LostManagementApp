@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var _a;
     (_a = document.getElementById("search-button")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", () => __awaiter(this, void 0, void 0, function* () {
 
-        const data = getLostSearchText();
+        const data = getLostTextBox();
 
         const response = yield fetch("/LostApi/GetLost", {
             method: "POST",
@@ -47,46 +47,25 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener("DOMContentLoaded", function () {
     var _a;
     (_a = document.getElementById("insert-button")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", () => __awaiter(this, void 0, void 0, function* () {
-        const lostDate = new Date(document.getElementById("lostDate").value);
-        const foundDate = new Date(document.getElementById("foundDate").value);
-        const lostItem = document.getElementById("lostItem").value;
-        const lostPlace = document.getElementById("lostPlace").value;
-        const lostDetailedPlace = document.getElementById("lostDetail").value;
-        // lostItem, lostPlace, lostDetailedPlaceが空でないことを確認
-        if (!lostItem || !lostPlace || !lostDetailedPlace) {
-            alert("全ての項目を入力してください。");
-            return;
-        }
-        const data = {
-            UserId: 1,
-            IsFound: false,
-            LostDate: lostDate,
-            FoundDate: foundDate,
-            LostItem: lostItem,
-            LostPlace: lostPlace,
-            LostDetailedPlace: lostDetailedPlace,
-        };
-        yield fetch("/LostApi/InsertLost", {
+        
+        const data = getLostTextBox();
+
+        // サーバーに選択されたデータを送信
+        const response = yield fetch("/LostApi/InsertLost", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(data),
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("Failed to insert item");
-                }
-                return response.json();
-            })
-            .then(data => {
-                alert("追加が完了しました");
-                console.log("Insert successful:", data);
-            })
-            .catch(error => {
-                console.error("Error:", error);
-            });
-        location.reload();
+        });
+        if (response.ok) {
+            alert("追加が完了しました");
+            location.reload();
+        }
+        else {
+            console.error("Failed to send data to delete page");
+            return;
+        }
     }));
 });
 
@@ -100,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
         // サーバーに選択されたデータを送信
-        const response = yield fetch("/LostApi/DeleteLost", {
+        const response = yield fetch("/LostApi/DeleteLostIds", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -116,22 +95,6 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
     }));
-});
-
-// 詳細画面の発見ステータスチェックボックス押下時に、発見日の活性・非活性を切り替える
-document.addEventListener("DOMContentLoaded", function () {
-    var _a;
-    (_a = document.getElementById("isFound")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", () => __awaiter(this, void 0, void 0, function* () {
-        const isFound = document.getElementById("isFound").checked;
-        const input_foundDate = document.getElementById("foundDate");
-        // 発見済みのチェックボックスの値から、発見日の活性・非活性ステータスを切り替える
-        if (isFound) {
-            input_foundDate.disabled = false;
-        }
-        else {
-            input_foundDate.disabled = true;
-        }
-        }));
 });
 
 
@@ -172,7 +135,8 @@ function createTable(data) {
         row.appendChild(checkboxCell);
         // 紛失ID列（行番号を表示）
         const idCell = document.createElement("td");
-        idCell.textContent = (index + 1).toString();
+        // idCell.textContent = (index + 1).toString();
+        idCell.textContent = item.lostId.toString();
         row.appendChild(idCell);
         // 詳細列（●を表示）
         const form = document.createElement("form");
@@ -225,85 +189,91 @@ function createTable(data) {
             // 行をテーブルに追加
             tableBody.appendChild(row);
         });
-    }
+}
 
 // 検索条件を取得する関数
-function getLostSearchText() {
+function getLostTextBox() {
+    clearErrorMessage();
+
     const lostItem = document.getElementById("lostItem").value;
     const lostPlace = document.getElementById("lostPlace").value;
     const lostDetailedPlace = document.getElementById("lostDetail").value;
     const lostDateValue = formatDate(document.getElementById("lostDate").value);
     const foundDateValue = formatDate(document.getElementById("foundDate").value);
     var lostDate;
+    var isFound = false;
     var foundDate;
+    var searchError = 0;
 
     if (lostDateValue) {
         if (isNaN(new Date(lostDateValue).getTime())) {
-            alert("紛失日は日付形式で入力してください。");
-            return;
-        }
-        else {
-            // ISO8601形式に変換（空の場合はnull）
+            showErrorMessage("紛失日は日付形式で入力してください。");
+            searchError++;
+        } else {
             lostDate = lostDateValue ? new Date(lostDateValue).toISOString() : null;
         }
     }
 
     if (foundDateValue) {
         if (isNaN(new Date(foundDateValue).getTime())) {
-            alert("発見日は日付形式で入力してください。");
-            return;
-        }
-        else {
-            // ISO8601形式に変換（空の場合はnull）
+            showErrorMessage("発見日は日付形式で入力してください。");
+            searchError++;
+        } else {
             foundDate = foundDateValue ? new Date(foundDateValue).toISOString() : null;
         }
     }
 
     if (lostItem) {
         if (lostItem.length > 100) {
-            alert("なくしたものは100文字以内で入力してください。");
-            return;
+            showErrorMessage("なくしたものは100文字以内で入力してください。");
+            searchError++;
         }
     }
 
     if (lostPlace) {
         if (lostPlace.length > 100) {
-            alert("なくした場所は100文字以内で入力してください。");
-            return;
+            showErrorMessage("なくした場所は100文字以内で入力してください。");
+            searchError++;
         }
     }
 
     if (lostDetailedPlace) {
         if (lostDetailedPlace.length > 100) {
-            alert("なくした詳細な場所は100文字以内で入力してください。");
-            return;
+            showErrorMessage("なくした詳細な場所は100文字以内で入力してください。");
+            searchError++;
         }
     }
 
     if (lostDate) {
         if (lostDate > new Date().toISOString()) {
-            alert("紛失日は未来の日付にできません。");
-            return;
-        };
+            showErrorMessage("紛失日は未来の日付にできません。");
+            searchError++;
+        }
     }
 
     if (foundDate) {
+        isFound = true;
         if (lostDate > new Date().toISOString()) {
-            alert("発見日は未来の日付にできません。");
-            return;
-        };
+            showErrorMessage("発見日は未来の日付にできません。");
+            searchError++;
+        }
     }
 
+    if(searchError > 0) {
+        return;
+    }
+
+    // LostIdは仮の値で1を設定（API処理の際、NULLだとエラーが発生）
     const data = {
         LostId: 1,
         UserId: 1,
-        IsFound: false,
+        IsFound: isFound,
         LostDate: lostDate,
         FoundDate: foundDate,
         LostItem: lostItem,
         LostPlace: lostPlace,
         LostDetailedPlace: lostDetailedPlace,
-        RegistrateDate: null,
+        RegistrateDate: new Date().toISOString(),
         UpdateDate: null
     };
 

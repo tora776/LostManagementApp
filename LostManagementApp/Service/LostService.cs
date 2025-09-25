@@ -42,6 +42,11 @@ namespace LostManagementApp.Service
             _lostDao.UpdateLost(lost);
         }
 
+        public void DeleteLostIds(List<int> lostIds)
+        {
+            _lostDao.DeleteLostIds(lostIds);
+        }
+
         public void DeleteLost(int lostId)
         {
             _lostDao.DeleteLost(lostId);
