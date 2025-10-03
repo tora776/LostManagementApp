@@ -69,8 +69,8 @@ document.addEventListener("DOMContentLoaded", function () {
         if (response.ok) {
             alert("削除が完了しました");
             const baseUrl = '/'
-    const url = `${baseUrl}`;
-    window.location.href = url;
+            const url = `${baseUrl}`;
+            window.location.href = url;
         }
         else {
             console.error("Failed to send data to update page");
@@ -81,6 +81,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // 紛失情報の入力値を取得する関数
 function getLostTextValue() {
+    /*
     const lostId = document.getElementById("lostId").value;
     const lostItem = document.getElementById("lostItem").value;
     const lostPlace = document.getElementById("lostPlace").value;
@@ -88,10 +89,10 @@ function getLostTextValue() {
     const lostDetailedPlace = document.getElementById("lostDetail").value;
     const lostDateValue = formatDate(document.getElementById("lostDate").value);
     const foundDateValue = formatDate(document.getElementById("foundDate").value);
-    const updateDate = formatDate(new Date().toString().toISOString());
-    const lostDate;
-    const foundDate;
-
+    const updateDate = formatDate(new Date().toISOString());
+    var lostDate;
+    var foundDate;
+    
     if (!lostDateValue) {
         if (isNaN(lostDateValue)) {
             alert("紛失日は日付形式で入力してください。");
@@ -152,6 +153,7 @@ function getLostTextValue() {
             return;
         };
     }
+    
 
     const data = {
         LostId: parseInt(lostId),
@@ -166,5 +168,90 @@ function getLostTextValue() {
         UpdateDate: updateDate
     };
 
+    */
+
+    clearErrorMessage();
+
+    const lostItem = document.getElementById("lostItem").value;
+    const lostPlace = document.getElementById("lostPlace").value;
+    const lostDetailedPlace = document.getElementById("lostDetail").value;
+    const lostDateValue = formatDate(document.getElementById("lostDate").value);
+    const foundDateValue = formatDate(document.getElementById("foundDate").value);
+    var lostDate;
+    var isFound = document.getElementById("isFound").checked;
+    var foundDate;
+    var searchError = 0;
+
+    if (lostDateValue) {
+        if (isNaN(new Date(lostDateValue).getTime())) {
+            showErrorMessage("紛失日は日付形式で入力してください。");
+            searchError++;
+        } else {
+            lostDate = lostDateValue ? new Date(lostDateValue).toISOString() : null;
+        }
+    }
+
+    if (foundDateValue) {
+        if (isNaN(new Date(foundDateValue).getTime())) {
+            showErrorMessage("発見日は日付形式で入力してください。");
+            searchError++;
+        } else {
+            foundDate = foundDateValue ? new Date(foundDateValue).toISOString() : null;
+        }
+    }
+
+    if (lostItem) {
+        if (lostItem.length > 100) {
+            showErrorMessage("なくしたものは100文字以内で入力してください。");
+            searchError++;
+        }
+    }
+
+    if (lostPlace) {
+        if (lostPlace.length > 100) {
+            showErrorMessage("なくした場所は100文字以内で入力してください。");
+            searchError++;
+        }
+    }
+
+    if (lostDetailedPlace) {
+        if (lostDetailedPlace.length > 100) {
+            showErrorMessage("なくした詳細な場所は100文字以内で入力してください。");
+            searchError++;
+        }
+    }
+
+    if (lostDate) {
+        if (lostDate > new Date().toISOString()) {
+            showErrorMessage("紛失日は未来の日付にできません。");
+            searchError++;
+        }
+    }
+
+    if (foundDate) {
+        isFound = true;
+        if (lostDate > new Date().toISOString()) {
+            showErrorMessage("発見日は未来の日付にできません。");
+            searchError++;
+        }
+    }
+
+    if (searchError > 0) {
+        return;
+    }
+
+    // LostIdは仮の値で1を設定（API処理の際、NULLだとエラーが発生）
+    const data = {
+        LostId: 1,
+        UserId: 1,
+        IsFound: isFound,
+        LostDate: lostDate,
+        FoundDate: foundDate,
+        LostItem: lostItem,
+        LostPlace: lostPlace,
+        LostDetailedPlace: lostDetailedPlace,
+        RegistrateDate: new Date().toISOString(),
+        UpdateDate: new Date().toISOString()
+    };
     return data;
 }
