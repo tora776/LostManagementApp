@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (response.ok) {
             // 詳細ページをリロードする
             alert("更新が完了しました");
-            location.reload();
+            // location.reload();
         }
         else {
             console.error("Failed to send data to update page");
