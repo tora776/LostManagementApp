@@ -110,7 +110,7 @@ namespace LostManagementApp.Migrations
                     b.ToTable("losts");
                 });
 
-            modelBuilder.Entity("LostManagementApp.Models.User", b =>
+            modelBuilder.Entity("LostManagementApp.Models.Users", b =>
                 {
                     b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
@@ -127,7 +127,7 @@ namespace LostManagementApp.Migrations
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("user_password");
+                        .HasColumnName("password");
 
                     b.Property<DateTime>("RegistrateDate")
                         .HasColumnType("timestamp with time zone")

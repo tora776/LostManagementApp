@@ -57,5 +57,9 @@ namespace LostManagementApp.Models
         /// </summary>
         [Column("update_date")]
         public DateTime? UpdateDate { get; set; }
+
+        // ナビゲーションプロパティ
+        [ForeignKey("UserId")]
+        public required Users User { get; set; }
     }
 }

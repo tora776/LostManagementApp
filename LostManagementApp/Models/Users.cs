@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace LostManagementApp.Models
 {
     [Table("users")]
-    public class User
+    public class Users
     {
         /// <summary>
         /// ユーザーID
@@ -25,7 +25,7 @@ namespace LostManagementApp.Models
         /// <summary>
         /// パスワード
         /// </summary>
-        [Column("user_password")]
+        [Column("login_password")]
         public required string Password { get; set; }
         /// <summary>
         /// 登録日
@@ -36,7 +36,7 @@ namespace LostManagementApp.Models
         /// 更新日
         /// </summary>
         [Column("update_date")]
-        public DateTime UpdateDate { get; set; }
+        public DateTime? UpdateDate { get; set; }
 
         /// <summary>
         /// ナビゲーションプロパティ: ユーザー情報

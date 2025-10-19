@@ -22,7 +22,19 @@ namespace LostManagementApp.Dao
             var LostData = _context.Lost
                 .Where(x => x.LostId == LostId)
                 .FirstOrDefault()
-                ?? new Lost { LostId = -1};
+                ?? new Lost
+                {
+                    LostId = -1,
+                    User = new Users
+                    {
+                        UserName = string.Empty,
+                        Email = string.Empty,
+                        Password = string.Empty,
+                        RegistrateDate = DateTime.MinValue,
+                        Losts = new List<Lost>(),
+                        Logins = new List<Login>()
+                    }
+                };
 
             return LostData;
         }
@@ -64,7 +76,7 @@ namespace LostManagementApp.Dao
                 query = query.Where(x => x.LostDetailedPlace == lost.LostDetailedPlace);
             }
 
-            query.OrderBy(x => x.LostId);
+            query = query.OrderBy(x => x.LostId);
 
             return query.ToList();
         }

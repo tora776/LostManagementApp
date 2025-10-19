@@ -81,94 +81,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // 紛失情報の入力値を取得する関数
 function getLostTextValue() {
-    /*
-    const lostId = document.getElementById("lostId").value;
-    const lostItem = document.getElementById("lostItem").value;
-    const lostPlace = document.getElementById("lostPlace").value;
-    const isFound = document.getElementById("isFound").checked;
-    const lostDetailedPlace = document.getElementById("lostDetail").value;
-    const lostDateValue = formatDate(document.getElementById("lostDate").value);
-    const foundDateValue = formatDate(document.getElementById("foundDate").value);
-    const updateDate = formatDate(new Date().toISOString());
-    var lostDate;
-    var foundDate;
-    
-    if (!lostDateValue) {
-        if (isNaN(lostDateValue)) {
-            alert("紛失日は日付形式で入力してください。");
-        }
-        else {
-            // ISO8601形式に変換（空の場合はnull）
-            lostDate = lostDateValue ? new Date(lostDateValue).toISOString() : null;
-        }
-    }
-
-    if (!foundDateValue) {
-        if (isNan(foundDateValue)) {
-            alert("発見日は日付形式で入力してください。");
-        }
-        else {
-            // ISO8601形式に変換（空の場合はnull）
-            foundDate = foundDateValue ? new Date(foundDateValue).toISOString() : null;
-        }
-    }
-
-    // 入力チェック
-    if (!lostId) {
-        alert("紛失IDが存在しません。");
-        return;
-    }
-
-    if (!lostItem) {
-        if (lostItem.length <= 100) {
-            alert("紛失物名は100文字以内で入力してください。");
-            return;
-        }
-    }
-
-    if (!lostPlace) {
-        if (lostPlace.length <= 100) {
-            alert("紛失した場所は100文字以内で入力してください。");
-            return;
-        }
-    }
-
-    if (!lostDetailedPlace) {
-        if (lostDetailedPlace.length <= 100) {
-            alert("紛失した詳細な場所は100文字以内で入力してください。");
-            return;
-        }
-    }
-
-    if (!lostDate) {
-        if (lostDate > new Date().toISOString()) {
-            alert("紛失日は未来の日付にできません。");
-            return;
-        };
-    }
-
-    if (!foundDate) {
-        if (lostDate > new Date().toISOString()) {
-            alert("発見日は未来の日付にできません。");
-            return;
-        };
-    }
-    
-
-    const data = {
-        LostId: parseInt(lostId),
-        UserId: 1,
-        IsFound: isFound,
-        LostDate: lostDate,
-        FoundDate: foundDate,
-        LostItem: lostItem,
-        LostPlace: lostPlace,
-        LostDetailedPlace: lostDetailedPlace,
-        RegistrateDate: null,
-        UpdateDate: updateDate
-    };
-
-    */
 
     clearErrorMessage();
 
@@ -189,7 +101,10 @@ function getLostTextValue() {
         } else {
             lostDate = lostDateValue ? new Date(lostDateValue).toISOString() : null;
         }
+    } else if (lostDateValue === "") {
+        lostDate = null;
     }
+
 
     if (foundDateValue) {
         if (isNaN(new Date(foundDateValue).getTime())) {
@@ -198,6 +113,8 @@ function getLostTextValue() {
         } else {
             foundDate = foundDateValue ? new Date(foundDateValue).toISOString() : null;
         }
+    } else if (foundDateValue === "") {
+        foundDate = null;
     }
 
     if (lostItem) {

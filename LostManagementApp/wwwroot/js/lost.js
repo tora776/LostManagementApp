@@ -205,16 +205,22 @@ function getLostTextBox() {
     var foundDate;
     var searchError = 0;
 
-    if (lostDateValue) {
+    if (lostDateValue === "") {
+        // API処理でエラー発生を防ぐため、任意の日付を入力
+        lostDate = new Date().toISOString();
+    } else {
         if (isNaN(new Date(lostDateValue).getTime())) {
-            showErrorMessage("紛失日は日付形式で入力してください。");
+            showErrorMessage("発見日は日付形式で入力してください。");
             searchError++;
         } else {
             lostDate = lostDateValue ? new Date(lostDateValue).toISOString() : null;
         }
     }
 
-    if (foundDateValue) {
+    if (foundDateValue === "") {
+        // API処理でエラー発生を防ぐため、任意の日付を入力
+        foundDate = new Date().toISOString();
+    } else {
         if (isNaN(new Date(foundDateValue).getTime())) {
             showErrorMessage("発見日は日付形式で入力してください。");
             searchError++;
@@ -274,7 +280,7 @@ function getLostTextBox() {
         LostPlace: lostPlace,
         LostDetailedPlace: lostDetailedPlace,
         RegistrateDate: new Date().toISOString(),
-        UpdateDate: null
+        UpdateDate: new Date().toISOString()
     };
 
     return data;

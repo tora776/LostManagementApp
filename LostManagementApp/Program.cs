@@ -13,8 +13,9 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<LostContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<ILostDao, LostDao>();
+builder.Services.AddScoped<ILoginDao, LoginDao>();
 builder.Services.AddScoped<LostService>();
-
+builder.Services.AddScoped<LoginService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -34,8 +35,12 @@ app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
+    pattern: "{controller=Home}/{action=Login}")
+    .WithStaticAssets();
+
+app.MapControllerRoute(
+    name: "lost",
     pattern: "{controller=Home}/{action=Lost}/{id?}")
-    //pattern: "{controller=Losts}/{action=Index}/{id?}")
     .WithStaticAssets();
 
 

@@ -30,7 +30,17 @@ namespace LostManagementApp.Controllers
                 FoundDate = null,
                 LostItem = "",
                 LostPlace = "",
-                LostDetailedPlace = ""
+                LostDetailedPlace = "",
+                User = new Users
+                {
+                    UserId = 1,
+                    UserName = "",
+                    Email = "",
+                    Password = "",
+                    RegistrateDate = DateTime.Now,
+                    Losts = new List<Lost>(),
+                    Logins = new List<Login>()
+                }
             });
             return View(Losts);
         }
@@ -44,6 +54,11 @@ namespace LostManagementApp.Controllers
         {
             var LostData = _lostService.GetLost(LostId);
             return View(LostData);
+        }
+
+        public IActionResult Login()
+        {
+            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

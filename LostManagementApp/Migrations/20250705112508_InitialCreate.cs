@@ -20,7 +20,7 @@ namespace LostManagementApp.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     user_name = table.Column<string>(type: "text", nullable: false),
                     email = table.Column<string>(type: "text", nullable: false),
-                    user_password = table.Column<string>(type: "text", nullable: false),
+                    login_password = table.Column<string>(type: "text", nullable: false),
                     registrate_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     update_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
