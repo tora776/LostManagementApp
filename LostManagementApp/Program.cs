@@ -33,10 +33,10 @@ app.UseAuthorization();
 
 app.MapStaticAssets();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Login}")
-    .WithStaticAssets();
+//app.MapControllerRoute(
+//    name: "default",
+//    pattern: "{controller=Home}/{action=Login}")
+//    .WithStaticAssets();
 
 app.MapControllerRoute(
     name: "lost",
