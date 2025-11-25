@@ -1,7 +1,8 @@
 ﻿using LostManagementApp.Models;
-using LostManagementApp.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using LostManagementApp.DatabaseContext;
+using LostManagementApp.Dao;
 
 namespace LostManagementApp.Controllers
 {
@@ -9,20 +10,23 @@ namespace LostManagementApp.Controllers
     [ApiController]
     public class LostApiController : ControllerBase
     {
-        private readonly LostService _lostService;
-        public LostApiController(LostService lostService)
+        private readonly LostContext _context;
+        private readonly LostDao lostDao;
+        public LostApiController(LostContext LostContext)
         {
-            _lostService = lostService;
+            _context = LostContext;
+            lostDao = new LostDao(_context);
+
         }
 
         [HttpPost("GetLost")]
-        public IActionResult GetLostList([FromBody] Lost lost)
+        public IActionResult GetLostList([FromBody] LostDto lostDto)
         {
-            if (lost == null)
+            if (lostDto == null)
             {
                 return BadRequest("Invalid lost item data.");
             }
-            var lostItems = _lostService.GetLostList(lost);
+            var lostItems = lostDao.GetLostList(lostDto);
             if (lostItems == null || !lostItems.Any())
             {
                 return NotFound("No lost items found.");
@@ -37,7 +41,7 @@ namespace LostManagementApp.Controllers
             {
                 return BadRequest("Invalid lost item data.");
             }
-            _lostService.InsertLost(lost);
+            lostDao.InsertLost(lost);
             return CreatedAtAction(nameof(GetLostList), new { id = lost.LostId }, lost);
         }
 
@@ -48,7 +52,7 @@ namespace LostManagementApp.Controllers
             {
                 return BadRequest("Invalid lost item data.");
             }
-            _lostService.UpdateLost(lost);
+            lostDao.UpdateLost(lost);
             return NoContent();
         }
 
@@ -61,8 +65,8 @@ namespace LostManagementApp.Controllers
                 return BadRequest("Invalid lost item data.");
             }
             */
-            //var lost = _lostService.GetLost(lostId);
-            _lostService.DeleteLostIds(lostIds);
+            //var lost = lostDao.GetLost(lostId);
+            lostDao.DeleteLostIds(lostIds);
             return NoContent();
         }
 
@@ -75,8 +79,8 @@ namespace LostManagementApp.Controllers
                 return BadRequest("Invalid lost item data.");
             }
             */
-            //var lost = _lostService.GetLost(lostId);
-            _lostService.DeleteLost(lostId);
+            //var lost = lostDao.GetLost(lostId);
+            lostDao.DeleteLost(lostId);
             return NoContent();
         }
     }

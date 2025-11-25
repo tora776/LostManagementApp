@@ -5,7 +5,7 @@ namespace LostManagementApp.Dao
     public interface ILostDao
     {
         // 全件取得
-        List<Lost> GetLostList(Lost lost);
+        List<Lost> GetLostList(LostDto lostDto);
         void InsertLost(Lost lost);
         void UpdateLost(Lost lost);
         void DeleteLostIds(List<int> lostId);

@@ -1,5 +1,4 @@
-﻿html Views\Losts\Index.cshtml
-@model IEnumerable<LostManagementApp.Models.Lost>
+﻿@model IEnumerable<LostManagementApp.Models.Lost>
 @{
     var search = ViewData["SearchModel"] as LostManagementApp.Models.LostDto ?? new LostManagementApp.Models.LostDto();
 }
@@ -7,14 +6,13 @@
 <h2>紛失物一覧／検索</h2>
 
 <!-- 検索フォーム（C# サーバーサイドで処理） -->
-<form asp-action="Index" method="post" class="mb-3">
+<form asp-action="Lost" method="post" class="mb-3">
     @Html.AntiForgeryToken()
     
     <div>
         <label>ユーザーID</label>
         <input type="number" name="UserId" value="@(search.UserId)" class="form-control" />
     </div>
-    
     <div>
         <label>なくした日</label>
         <input type="date" name="LostDate" value="@(search.LostDate?.ToString("yyyy-MM-dd"))" class="form-control" />
@@ -64,7 +62,7 @@
                     </td>
                     <td>@item.LostId</td>
                     <td>
-                        <a asp-action="Details" asp-route-id="@item.LostId">●</a>
+                        <a asp-action="Detail" asp-route-id="@item.LostId">●</a>
                     </td>
                     <td>@(item.LostDate?.ToString("yyyy-MM-dd") ?? "")</td>
                     <td>@(item.FoundDate?.ToString("yyyy-MM-dd") ?? "")</td>

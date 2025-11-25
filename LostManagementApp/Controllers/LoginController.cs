@@ -1,6 +1,6 @@
 ﻿using LostManagementApp.Models;
-using LostManagementApp.Service;
 using Microsoft.AspNetCore.Mvc;
+using LostManagementApp.DatabaseContext;
 
 namespace LostManagementApp.Controllers
 {
@@ -8,13 +8,13 @@ namespace LostManagementApp.Controllers
     [ApiController]
     public class LoginController : Controller
     {
-        private readonly LoginService _loginService;
+        private readonly LostContext _context;
 
-        public LoginController(LoginService loginService)
+        public LoginController(LostContext LostContext)
         {
-            _loginService = loginService;
+            _context = LostContext;
         }
-
+        /*
         // [HttpGet("index")]
         public IActionResult Index()
         {
@@ -27,7 +27,7 @@ namespace LostManagementApp.Controllers
         {
             try
             {
-                var token = _loginService.Authenticate(request.UserId, request.Password);
+                var token = _context.Authenticate(request.UserId, request.Password);
                 if (token == null)
                 {
                     return Unauthorized();
@@ -48,7 +48,7 @@ namespace LostManagementApp.Controllers
         [HttpPost("checktoken")]
         public IActionResult CheckToken([FromBody] TokenRequest request)
         {
-            if (!_loginService.IsTokenValid(request.Token))
+            if (!_context.IsTokenValid(request.Token))
                 return Unauthorized();
 
             return Ok();
@@ -64,5 +64,7 @@ namespace LostManagementApp.Controllers
     public class TokenRequest
     {
         public required string Token { get; set; }
+    }
+        */
     }
 }

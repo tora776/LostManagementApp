@@ -44,36 +44,36 @@ namespace LostManagementApp.Dao
         /// </summary>
         /// <param name="lost">紛失物情報</param>
         /// TODO:ユーザーID,紛失物,紛失場所,紛失した詳細な場所が指定されている場合は、該当する紛失物を取得する
-        public List<Lost> GetLostList(Lost lost)
+        public List<Lost> GetLostList(LostDto lostDto)
         {
             var query = _context.Lost.AsQueryable();
             // UserIdは必須
-            query = query.Where(x => x.UserId == lost.UserId);
+            query = query.Where(x => x.UserId == lostDto.UserId);
 
             // nullまたは空でなければ条件を追加
-            if (!string.IsNullOrEmpty(lost.LostDate?.ToString("yyyy/MM/dd")))
+            if (!string.IsNullOrEmpty(lostDto.LostDate?.ToString("yyyy/MM/dd")))
             {
-                query = query.Where(x => x.LostDate == lost.LostDate);
+                query = query.Where(x => x.LostDate == lostDto.LostDate);
             }
 
-            if (!string.IsNullOrEmpty(lost.FoundDate?.ToString("yyyy/MM/dd")))
+            if (!string.IsNullOrEmpty(lostDto.FoundDate?.ToString("yyyy/MM/dd")))
             {
-                query = query.Where(x => x.FoundDate == lost.FoundDate);
+                query = query.Where(x => x.FoundDate == lostDto.FoundDate);
             }
 
-            if (!string.IsNullOrEmpty(lost.LostItem))
+            if (!string.IsNullOrEmpty(lostDto.LostItem))
             {
-                query = query.Where(x => x.LostItem == lost.LostItem);
+                query = query.Where(x => x.LostItem == lostDto.LostItem);
             }
 
-            if (!string.IsNullOrEmpty(lost.LostPlace))
+            if (!string.IsNullOrEmpty(lostDto.LostPlace))
             {
-                query = query.Where(x => x.LostPlace == lost.LostPlace);
+                query = query.Where(x => x.LostPlace == lostDto.LostPlace);
             }
 
-            if (!string.IsNullOrEmpty(lost.LostDetailedPlace))
+            if (!string.IsNullOrEmpty(lostDto.LostDetailedPlace))
             {
-                query = query.Where(x => x.LostDetailedPlace == lost.LostDetailedPlace);
+                query = query.Where(x => x.LostDetailedPlace == lostDto.LostDetailedPlace);
             }
 
             query = query.OrderBy(x => x.LostId);
