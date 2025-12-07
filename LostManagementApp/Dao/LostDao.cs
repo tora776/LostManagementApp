@@ -80,12 +80,25 @@ namespace LostManagementApp.Dao
         /// 紛失物を登録する
         /// </summary>
         /// <param name="lost">紛失物情報</param>
-        public void InsertLost(Lost lost)
+        public void InsertLost(LostDto lostDto)
         {
-            lost.RegistrateDate = DateTime.UtcNow;
-            lost.UpdateDate = DateTime.UtcNow;
-            // LostIdの最大値 + 1を取得
-            lost.LostId = GetMaxLostId();
+            //lost.RegistrateDate = DateTime.UtcNow;
+            //lost.UpdateDate = DateTime.UtcNow;
+            //// LostIdの最大値 + 1を取得
+            //lost.LostId = GetMaxLostId();
+            var lost = new Lost
+            {
+                LostId = GetMaxLostId(),
+                UserId = lostDto.UserId,
+                IsFound =  lostDto.FoundDate.HasValue,
+                LostDate = lostDto.LostDate,
+                FoundDate = lostDto.FoundDate,
+                LostItem = lostDto.LostItem,
+                LostPlace = lostDto.LostPlace,
+                LostDetailedPlace = lostDto.LostDetailedPlace,
+                RegistrateDate = DateTime.UtcNow,
+                UpdateDate = DateTime.UtcNow
+            };
             _context.Lost.Add(lost);
             _context.SaveChanges();
         }

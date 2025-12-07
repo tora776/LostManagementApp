@@ -41,7 +41,7 @@ namespace LostManagementApp.Controllers
             {
                 return BadRequest("Invalid lost item data.");
             }
-            lostDao.InsertLost(lost);
+            //lostDao.InsertLost(lost);
             return CreatedAtAction(nameof(GetLostList), new { id = lost.LostId }, lost);
         }
 

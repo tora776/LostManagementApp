@@ -65,11 +65,11 @@ namespace LostManagementApp.Controllers
         // POST: Losts/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Insert([Bind("LostId,UserId,IsFound,LostDate,FoundDate,LostItem,LostPlace,LostDetailedPlace,RegistrateDate,UpdateDate")] Lost lost)
+        public IActionResult Insert([Bind("LostId,UserId,LostDate,FoundDate,LostItem,LostPlace,LostDetailedPlace")] LostDto lostDto)
         {
             if (ModelState.IsValid)
             {
-                lostDao.InsertLost(lost);
+                lostDao.InsertLost(lostDto);
                 //_context.Add(lost);
                 //await _context.SaveChangesAsync();
                 //return RedirectToAction(nameof(Index));
