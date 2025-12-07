@@ -47,38 +47,33 @@ namespace LostManagementApp.Dao
         public List<Lost> GetLostList(LostDto lostDto)
         {
             var query = _context.Lost.AsQueryable();
-            // UserIdは必須
-            query = query.Where(x => x.UserId == lostDto.UserId);
 
-            // nullまたは空でなければ条件を追加
-            if (!string.IsNullOrEmpty(lostDto.LostDate?.ToString("yyyy/MM/dd")))
+            // UserId が 0 の場合は全ユーザー（必要なら必須に変更）
+            if (lostDto.UserId != 0)
+                query = query.Where(x => x.UserId == lostDto.UserId);
+
+            if (lostDto.LostDate.HasValue)
             {
-                query = query.Where(x => x.LostDate == lostDto.LostDate);
+                var d = lostDto.LostDate.Value.Date;
+                query = query.Where(x => x.LostDate.HasValue && x.LostDate.Value.Date == d);
             }
 
-            if (!string.IsNullOrEmpty(lostDto.FoundDate?.ToString("yyyy/MM/dd")))
+            if (lostDto.FoundDate.HasValue)
             {
-                query = query.Where(x => x.FoundDate == lostDto.FoundDate);
+                var d = lostDto.FoundDate.Value.Date;
+                query = query.Where(x => x.FoundDate.HasValue && x.FoundDate.Value.Date == d);
             }
 
-            if (!string.IsNullOrEmpty(lostDto.LostItem))
-            {
-                query = query.Where(x => x.LostItem == lostDto.LostItem);
-            }
+            if (!string.IsNullOrWhiteSpace(lostDto.LostItem))
+                query = query.Where(x => x.LostItem != null && x.LostItem.Contains(lostDto.LostItem));
 
-            if (!string.IsNullOrEmpty(lostDto.LostPlace))
-            {
-                query = query.Where(x => x.LostPlace == lostDto.LostPlace);
-            }
+            if (!string.IsNullOrWhiteSpace(lostDto.LostPlace))
+                query = query.Where(x => x.LostPlace != null && x.LostPlace.Contains(lostDto.LostPlace));
 
-            if (!string.IsNullOrEmpty(lostDto.LostDetailedPlace))
-            {
-                query = query.Where(x => x.LostDetailedPlace == lostDto.LostDetailedPlace);
-            }
+            if (!string.IsNullOrWhiteSpace(lostDto.LostDetailedPlace))
+                query = query.Where(x => x.LostDetailedPlace != null && x.LostDetailedPlace.Contains(lostDto.LostDetailedPlace));
 
-            query = query.OrderBy(x => x.LostId);
-
-            return query.ToList();
+            return query.OrderBy(x => x.LostId).ToListAsync().Result;
         }
 
         /// <summary>

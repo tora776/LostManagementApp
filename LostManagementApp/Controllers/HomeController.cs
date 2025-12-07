@@ -3,6 +3,8 @@ using LostManagementApp.DatabaseContext;
 using LostManagementApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace LostManagementApp.Controllers
@@ -23,7 +25,7 @@ namespace LostManagementApp.Controllers
 
         // GET: Losts
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             LostDto lostDto = new LostDto
             {
@@ -43,70 +45,37 @@ namespace LostManagementApp.Controllers
         // POST: Losts (検索フォーム)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index([Bind("UserId,LostDate,FoundDate,LostItem,LostPlace,LostDetailedPlace")] LostDto search)
+        public IActionResult Index([Bind("UserId,LostDate,FoundDate,LostItem,LostPlace,LostDetailedPlace")] LostDto search)
         {
-            var query = _context.Lost.AsQueryable();
-
-            // UserId が 0 の場合は全ユーザー（必要なら必須に変更）
-            if (search.UserId != 0)
-                query = query.Where(x => x.UserId == search.UserId);
-
-            if (search.LostDate.HasValue)
-            {
-                var d = search.LostDate.Value.Date;
-                query = query.Where(x => x.LostDate.HasValue && x.LostDate.Value.Date == d);
-            }
-
-            if (search.FoundDate.HasValue)
-            {
-                var d = search.FoundDate.Value.Date;
-                query = query.Where(x => x.FoundDate.HasValue && x.FoundDate.Value.Date == d);
-            }
-
-            if (!string.IsNullOrWhiteSpace(search.LostItem))
-                query = query.Where(x => x.LostItem != null && x.LostItem.Contains(search.LostItem));
-
-            if (!string.IsNullOrWhiteSpace(search.LostPlace))
-                query = query.Where(x => x.LostPlace != null && x.LostPlace.Contains(search.LostPlace));
-
-            if (!string.IsNullOrWhiteSpace(search.LostDetailedPlace))
-                query = query.Where(x => x.LostDetailedPlace != null && x.LostDetailedPlace.Contains(search.LostDetailedPlace));
-
-            var list = await query.OrderBy(x => x.LostId).ToListAsync();
+            var list = lostDao.GetLostList(search);
             ViewData["SearchModel"] = search;
             return View(list);
         }
 
         // 検索結果の個別詳細は GET 詳細ページへ（シンプルに GET リンクで遷移）
         [HttpGet]
-        public async Task<IActionResult> Detail(int? id)
+        public IActionResult Detail(int id)
         {
-            if (id == null) return NotFound();
-
-            var lost = await _context.Lost.FirstOrDefaultAsync(m => m.LostId == id);
+            var lost = lostDao.GetLost(id);
             if (lost == null) return NotFound();
 
             return View(lost);
         }
 
-        // GET: Losts/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
         // POST: Losts/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("LostId,UserId,IsFound,LostDate,FoundDate,LostItem,LostPlace,LostDetailedPlace,RegistrateDate,UpdateDate")] Lost lost)
+        public IActionResult Insert([Bind("LostId,UserId,IsFound,LostDate,FoundDate,LostItem,LostPlace,LostDetailedPlace,RegistrateDate,UpdateDate")] Lost lost)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(lost);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                lostDao.InsertLost(lost);
+                //_context.Add(lost);
+                //await _context.SaveChangesAsync();
+                //return RedirectToAction(nameof(Index));
             }
-            return View(lost);
+            return RedirectToAction("Index");
+            //return View(lost);
         }
 
         // GET: Losts/Edit/5
