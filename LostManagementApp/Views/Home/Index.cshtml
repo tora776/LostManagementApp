@@ -6,7 +6,8 @@
 <h2>紛失物一覧／検索</h2>
 
 <!-- 検索フォーム（C# サーバーサイドで処理） -->
-<form asp-action="Index" method="post" class="mb-3">
+<!-- form asp-action="Index" method="post" class="mb-3" -->
+<form action="@Url.Action("Index", "Home")" method="post">
     @Html.AntiForgeryToken()
     
     <div>
@@ -34,7 +35,8 @@
         <input type="text" name="LostDetailedPlace" value="@(search.LostDetailedPlace ?? "")" class="form-control" />
     </div>
     <button type="submit" class="btn btn-primary mt-2">検索</button>
-    <a asp-action="Insert" method="post" class="btn btn-success mt-2">新規登録</a>
+    <!-- a asp-action="GetInsert" class="btn btn-success mt-2"-->
+    <button type="submit" formaction="@Url.Action("Insert", "Home")" class="btn btn-success mt-2">新規登録</button>
 </form>
 
 <!-- 検索結果テーブル + 複数削除フォーム -->

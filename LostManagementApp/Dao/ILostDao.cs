@@ -6,7 +6,7 @@ namespace LostManagementApp.Dao
     {
         // 全件取得
         List<Lost> GetLostList(LostDto lostDto);
-        void InsertLost(Lost lost);
+        void InsertLost(LostDto lostDto);
         void UpdateLost(Lost lost);
         void DeleteLostIds(List<int> lostId);
         void DeleteLost(int lostId);

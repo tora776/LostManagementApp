@@ -3,16 +3,18 @@
 }
 
 @model LostManagementApp.Models.Lost
-<script src="~/js/common.js"></script>
-<script src="~/js/detail.js"></script>
+<!-- script src="~/js/common.js"></!-->
+<!-- script src="~/js/detail.js"></!--script>
 <div class="container mt-4">
     <h2>紛失物詳細画面</h2>
 
     <!-- 検索フォーム -->
-    <form id="loginForm">
+    <!-- form id="loginForm" -->
+    <form action="@Url.Action("Update", "Home")" method="post">
+        @Html.AntiForgeryToken()
         <div>
             <label for="lostId">紛失ID:</label>
-            <input type="text" id="lostId" name="lostId" value="@Model.LostId" required disabled/>
+            <input type="text" id="lostId" name="lostId" value="@Model.LostId" required readonly/>
         </div>
         <div>
             <label for="lostItem">なくしたもの:</label>
@@ -32,14 +34,14 @@
         </div>
         <div>
             <label for="isFound">紛失ステータス:</label>
-            <input type="checkbox" id="isFound" name="isFound" checked="@Model.IsFound" required />
+            <!-- input type="checkbox" id="isFound" name="isFound" value="true" checked="@Model.IsFound" required /-->
+            @Html.CheckBoxFor(m => m.IsFound, new { @checked = "checked" })
         </div>
         <div>
             <label for="updateDate">見つけた日付:</label>
             <input type="text" id="foundDate" name="foundDate" value="@Model.FoundDate?.ToString("yyyy/MM/dd")" required />
         </div>
-        <button type="button" id="update-button">更新</button>
-        <button type="button" id="delete-button">削除</button>
+        <button type="submit" class="btn btn-primary mt-2">更新</button>
+        <button type="submit" formaction="@Url.Action("Delete", "Home", new {id = @Model.LostId})" class="btn btn-success mt-2" formmethod="post">削除</button>
     </form>
     <div id="loginError" style="color:red;display:none;">更新に失敗しました。</div>
-</div>

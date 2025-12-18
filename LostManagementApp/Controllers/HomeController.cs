@@ -20,13 +20,13 @@ namespace LostManagementApp.Controllers
             _logger = logger;
             _context = context;
             lostDao = new LostDao(_context);
-
         }
 
         // GET: Losts
         [HttpGet]
         public IActionResult Index()
         {
+            //TODO:ユーザーIDを取得する
             LostDto lostDto = new LostDto
             {
                 UserId = 1,
@@ -36,7 +36,6 @@ namespace LostManagementApp.Controllers
                 LostPlace = "",
                 LostDetailedPlace = ""
             };
-            //TODO:ユーザーIDを取得し、検索を実行
             var list = lostDao.GetLostList(lostDto);
             ViewData["SearchModel"] = new LostDto();
             return View(list);
@@ -52,7 +51,6 @@ namespace LostManagementApp.Controllers
             return View(list);
         }
 
-        // 検索結果の個別詳細は GET 詳細ページへ（シンプルに GET リンクで遷移）
         [HttpGet]
         public IActionResult Detail(int id)
         {
@@ -65,41 +63,28 @@ namespace LostManagementApp.Controllers
         // POST: Losts/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Insert([Bind("LostId,UserId,LostDate,FoundDate,LostItem,LostPlace,LostDetailedPlace")] LostDto lostDto)
+        public IActionResult Insert(LostDto lostDto)
         {
             if (ModelState.IsValid)
             {
                 lostDao.InsertLost(lostDto);
-                //_context.Add(lost);
-                //await _context.SaveChangesAsync();
-                //return RedirectToAction(nameof(Index));
             }
             return RedirectToAction("Index");
             //return View(lost);
         }
 
-        // GET: Losts/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null) return NotFound();
-
-            var lost = await _context.Lost.FindAsync(id);
-            if (lost == null) return NotFound();
-            return View(lost);
-        }
-
         // POST: Losts/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("LostId,UserId,IsFound,LostDate,FoundDate,LostItem,LostPlace,LostDetailedPlace,RegistrateDate,UpdateDate")] Lost lost)
+        public async Task<IActionResult> Update([Bind("LostId,UserId,IsFound,LostDate,FoundDate,LostItem,LostPlace,LostDetailedPlace,RegistrateDate,UpdateDate")] Lost lost)
         {
-            if (id != lost.LostId) return NotFound();
-
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(lost);
+                    // TODO:userIdを自動取得
+                    lost.UserId = 1;
+                    lostDao.UpdateLost(lost);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -107,99 +92,37 @@ namespace LostManagementApp.Controllers
                     if (!LostExists(lost.LostId)) return NotFound();
                     else throw;
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Detail", new { id = lost.LostId});
             }
-            return View(lost);
+            // TODO:失敗時の処理
+            return RedirectToAction("Detail", new { id = lost.LostId });
         }
 
         // POST: Losts/DeleteSelected (複数削除)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteSelected([FromForm] int[] selectedIds)
+        public IActionResult DeleteSelected([FromForm] int[] selectedIds)
         {
             if (selectedIds != null && selectedIds.Length > 0)
             {
-                var items = _context.Lost.Where(x => selectedIds.Contains(x.LostId));
-                _context.Lost.RemoveRange(items);
-                await _context.SaveChangesAsync();
+                lostDao.DeleteLostIds(selectedIds.ToList());
             }
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Losts/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null) return NotFound();
-
-            var lost = await _context.Lost.FirstOrDefaultAsync(m => m.LostId == id);
-            if (lost == null) return NotFound();
-
-            return View(lost);
-        }
-
         // POST: Losts/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult Delete(int id)
         {
-            var lost = await _context.Lost.FindAsync(id);
-            if (lost != null) _context.Lost.Remove(lost);
-            await _context.SaveChangesAsync();
+            lostDao.DeleteLost(id);
             return RedirectToAction(nameof(Index));
         }
-
+        
         private bool LostExists(int id)
         {
             return _context.Lost.Any(e => e.LostId == id);
         }
-        /*
-        public IActionResult Lost()
-        {
-            // TODO:ユーザーIDを自動取得
-            // 紛失物の条件指定はなし
-            List<Lost> Losts = _context.GetLostList(new Lost
-            {
-                UserId = 1,
-                LostDate = null,
-                FoundDate = null,
-                LostItem = "",
-                LostPlace = "",
-                LostDetailedPlace = "",
-                User = new Users
-                {
-                    UserId = 1,
-                    UserName = "",
-                    Email = "",
-                    Password = "",
-                    RegistrateDate = DateTime.Now,
-                    Losts = new List<Lost>(),
-                    Logins = new List<Login>()
-                }
-            });
-            return View(Losts);
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        public IActionResult Detail(int LostId)
-        {
-            var LostData = _context.GetLost(LostId);
-            return View(LostData);
-        }
-
-        public IActionResult Login()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-        */
+        
     }
 }

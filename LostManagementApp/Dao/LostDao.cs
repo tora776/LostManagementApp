@@ -86,13 +86,16 @@ namespace LostManagementApp.Dao
             //lost.UpdateDate = DateTime.UtcNow;
             //// LostIdの最大値 + 1を取得
             //lost.LostId = GetMaxLostId();
+            DateTime lostDateValue = lostDto.LostDate ?? DateTime.MinValue;
+            DateTime foundDateValue = lostDto.FoundDate ?? DateTime.MinValue;
+
             var lost = new Lost
             {
                 LostId = GetMaxLostId(),
                 UserId = lostDto.UserId,
-                IsFound =  lostDto.FoundDate.HasValue,
-                LostDate = lostDto.LostDate,
-                FoundDate = lostDto.FoundDate,
+                IsFound = lostDto.FoundDate.HasValue,
+                LostDate = DateTime.SpecifyKind(lostDateValue, DateTimeKind.Utc),
+                FoundDate = DateTime.SpecifyKind(foundDateValue, DateTimeKind.Utc),
                 LostItem = lostDto.LostItem,
                 LostPlace = lostDto.LostPlace,
                 LostDetailedPlace = lostDto.LostDetailedPlace,
@@ -107,10 +110,21 @@ namespace LostManagementApp.Dao
         /// 紛失物を更新する
         /// </summary>
         /// <param name="lost">紛失物情報</param>
-        public void UpdateLost(Lost lost)
+        public void UpdateLost(Lost model)
         {
-            lost.UpdateDate = DateTime.UtcNow;
-            _context.Lost.Update(lost);
+            DateTime lostDateValue = model.LostDate ?? DateTime.MinValue;
+            DateTime foundDateValue = model.FoundDate ?? DateTime.MinValue;
+            var updateLost = GetLost(model.LostId);
+            DateTime registrateDateValue = updateLost.RegistrateDate ?? DateTime.MinValue;
+            updateLost.IsFound = model.IsFound;
+            updateLost.LostDate = DateTime.SpecifyKind(lostDateValue, DateTimeKind.Utc);
+            updateLost.FoundDate = DateTime.SpecifyKind(foundDateValue, DateTimeKind.Utc);
+            updateLost.LostItem = model.LostItem;
+            updateLost.LostPlace = model.LostPlace;
+            updateLost.LostDetailedPlace = model.LostDetailedPlace;
+            updateLost.RegistrateDate = DateTime.SpecifyKind(registrateDateValue, DateTimeKind.Utc);
+            updateLost.UpdateDate = DateTime.UtcNow;
+            _context.Lost.Update(updateLost);
             _context.SaveChanges();
         }
 

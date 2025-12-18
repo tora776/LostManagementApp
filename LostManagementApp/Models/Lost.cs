@@ -60,6 +60,6 @@ namespace LostManagementApp.Models
 
         // ナビゲーションプロパティ
         [ForeignKey("UserId")]
-        public required Users User { get; set; }
+        public  Users? User { get; set; }
     }
 }
