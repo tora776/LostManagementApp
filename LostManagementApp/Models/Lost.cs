@@ -35,16 +35,19 @@ namespace LostManagementApp.Models
         /// <summary>
         /// 紛失物
         /// </summary>
+        [StringLength(100)]
         [Column("lost_item")]
         public string? LostItem { get; set; }
         /// <summary>
         /// 紛失場所
         /// </summary>
+        [StringLength(100)]
         [Column("lost_place")]
         public string? LostPlace { get; set; }
         /// <summary>
         /// 紛失した詳細な場所
         /// </summary>
+        [StringLength(100)]
         [Column("lost_detailed_place")]
         public string? LostDetailedPlace { get; set; }
         /// <summary>
