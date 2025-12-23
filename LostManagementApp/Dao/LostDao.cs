@@ -1,5 +1,6 @@
 ﻿using LostManagementApp.DatabaseContext;
 using LostManagementApp.Models;
+using LostManagementApp.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace LostManagementApp.Dao
@@ -44,34 +45,34 @@ namespace LostManagementApp.Dao
         /// </summary>
         /// <param name="lost">紛失物情報</param>
         /// TODO:ユーザーID,紛失物,紛失場所,紛失した詳細な場所が指定されている場合は、該当する紛失物を取得する
-        public List<Lost> GetLostList(LostDto lostDto)
+        public List<Lost> GetLostList(LostViewModel model)
         {
             var query = _context.Lost.AsQueryable();
 
             // UserId が 0 の場合は全ユーザー（必要なら必須に変更）
-            if (lostDto.UserId != 0)
-                query = query.Where(x => x.UserId == lostDto.UserId);
+            if (model.UserId != 0)
+                query = query.Where(x => x.UserId == model.UserId);
 
-            if (lostDto.LostDate.HasValue)
+            if (model.LostDate.HasValue)
             {
-                var d = lostDto.LostDate.Value.Date;
+                var d = model.LostDate.Value.Date;
                 query = query.Where(x => x.LostDate.HasValue && x.LostDate.Value.Date == d);
             }
 
-            if (lostDto.FoundDate.HasValue)
+            if (model.FoundDate.HasValue)
             {
-                var d = lostDto.FoundDate.Value.Date;
+                var d = model.FoundDate.Value.Date;
                 query = query.Where(x => x.FoundDate.HasValue && x.FoundDate.Value.Date == d);
             }
 
-            if (!string.IsNullOrWhiteSpace(lostDto.LostItem))
-                query = query.Where(x => x.LostItem != null && x.LostItem.Contains(lostDto.LostItem));
+            if (!string.IsNullOrWhiteSpace(model.LostItem))
+                query = query.Where(x => x.LostItem != null && x.LostItem.Contains(model.LostItem));
 
-            if (!string.IsNullOrWhiteSpace(lostDto.LostPlace))
-                query = query.Where(x => x.LostPlace != null && x.LostPlace.Contains(lostDto.LostPlace));
+            if (!string.IsNullOrWhiteSpace(model.LostPlace))
+                query = query.Where(x => x.LostPlace != null && x.LostPlace.Contains(model.LostPlace));
 
-            if (!string.IsNullOrWhiteSpace(lostDto.LostDetailedPlace))
-                query = query.Where(x => x.LostDetailedPlace != null && x.LostDetailedPlace.Contains(lostDto.LostDetailedPlace));
+            if (!string.IsNullOrWhiteSpace(model.LostDetailedPlace))
+                query = query.Where(x => x.LostDetailedPlace != null && x.LostDetailedPlace.Contains(model.LostDetailedPlace));
 
             return query.OrderBy(x => x.LostId).ToListAsync().Result;
         }
@@ -80,25 +81,25 @@ namespace LostManagementApp.Dao
         /// 紛失物を登録する
         /// </summary>
         /// <param name="lost">紛失物情報</param>
-        public void InsertLost(LostDto lostDto)
+        public void InsertLost(LostViewModel model)
         {
             //lost.RegistrateDate = DateTime.UtcNow;
             //lost.UpdateDate = DateTime.UtcNow;
             //// LostIdの最大値 + 1を取得
             //lost.LostId = GetMaxLostId();
-            DateTime lostDateValue = lostDto.LostDate ?? DateTime.MinValue;
-            DateTime foundDateValue = lostDto.FoundDate ?? DateTime.MinValue;
+            DateTime lostDateValue = model.LostDate ?? DateTime.MinValue;
+            DateTime foundDateValue = model.FoundDate ?? DateTime.MinValue;
 
             var lost = new Lost
             {
                 LostId = GetMaxLostId(),
-                UserId = lostDto.UserId,
-                IsFound = lostDto.FoundDate.HasValue,
+                UserId = model.UserId,
+                IsFound = model.FoundDate.HasValue,
                 LostDate = DateTime.SpecifyKind(lostDateValue, DateTimeKind.Utc),
                 FoundDate = DateTime.SpecifyKind(foundDateValue, DateTimeKind.Utc),
-                LostItem = lostDto.LostItem,
-                LostPlace = lostDto.LostPlace,
-                LostDetailedPlace = lostDto.LostDetailedPlace,
+                LostItem = model.LostItem,
+                LostPlace = model.LostPlace,
+                LostDetailedPlace = model.LostDetailedPlace,
                 RegistrateDate = DateTime.UtcNow,
                 UpdateDate = DateTime.UtcNow
             };

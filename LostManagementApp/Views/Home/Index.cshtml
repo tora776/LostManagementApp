@@ -5,33 +5,46 @@
 
 <h2>紛失物一覧／検索</h2>
 
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+}
+
 <!-- 検索フォーム（C# サーバーサイドで処理） -->
 <!-- form asp-action="Index" method="post" class="mb-3" -->
 <form action="@Url.Action("Index", "Home")" method="post">
     @Html.AntiForgeryToken()
+    <div asp-validation-summary="All" class="text-danger"></div>
     
     <div>
         <label>ユーザーID</label>
+        <!-- span class="text-danger d-none fw-bold" asp-validation-for=""></!-->
+        @Html.ValidationMessageFor(model => search.UserId, "", new { @class = "text-danger" })
         <input type="number" name="UserId" value="@(search.UserId)" class="form-control" />
     </div>
     <div>
         <label>なくした日</label>
+        @Html.ValidationMessageFor(model => search.LostDate, "", new { @class = "text-danger" })
         <input type="date" name="LostDate" value="@(search.LostDate?.ToString("yyyy-MM-dd"))" class="form-control" />
     </div>
     <div>
         <label>発見日</label>
+        @Html.ValidationMessageFor(model => search.FoundDate, "", new { @class = "text-danger" })
         <input type="date" name="FoundDate" value="@(search.FoundDate?.ToString("yyyy-MM-dd"))" class="form-control" />
     </div>
     <div>
         <label>なくしたもの</label>
+        @Html.ValidationMessageFor(model => search.LostItem, "", new { @class = "text-danger" })
         <input type="text" name="LostItem" value="@(search.LostItem ?? "")" class="form-control" />
     </div>
     <div>
         <label>なくした場所</label>
+        @Html.ValidationMessageFor(model => search.LostPlace, "", new { @class = "text-danger" })
         <input type="text" name="LostPlace" value="@(search.LostPlace ?? "")" class="form-control" />
     </div>
     <div>
         <label>詳細な場所</label>
+        @Html.ValidationMessageFor(model => search.LostDetailedPlace, "", new { @class = "text-danger" })
         <input type="text" name="LostDetailedPlace" value="@(search.LostDetailedPlace ?? "")" class="form-control" />
     </div>
     <button type="submit" class="btn btn-primary mt-2">検索</button>
