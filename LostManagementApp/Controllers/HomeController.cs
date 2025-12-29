@@ -69,56 +69,72 @@ namespace LostManagementApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Insert(LostViewModel model)
         {
-            if (ModelState.IsValid)
+            if (model.LostDate.HasValue)
             {
-                if (model.LostDate.HasValue)
+                if (!DateTime.TryParse(model.LostDate.ToString(), out DateTime lostDate))
                 {
-                    if (!DateTime.TryParse(model.LostDate.ToString(), out DateTime lostDate))
-                    {
-                        ModelState.AddModelError("LostDate", "紛失日には正しい日付を入力してください。");
-                    }
-                }
-
-                if (model.FoundDate.HasValue)
-                {
-                    if (!DateTime.TryParse(model.FoundDate.ToString(), out DateTime FoundDate))
-                    {
-                        ModelState.AddModelError("FoundDate", "紛失日には正しい日付を入力してください。");
-                    }
-                }
-
-                if (!String.IsNullOrEmpty(model.LostItem))
-                {
-                    if (model.LostItem.Length > 100)
-                    {
-                        ModelState.AddModelError("LostItem", "紛失物は100文字以内で入力してください。");
-                    }
-                }
-
-                if (!String.IsNullOrEmpty(model.LostPlace))
-                {
-                    if (model.LostPlace.Length > 100)
-                    {
-                        ModelState.AddModelError("LostPlace", "紛失物は100文字以内で入力してください。");
-                    }
-                }
-
-                if (!String.IsNullOrEmpty(model.LostDetailedPlace))
-                {
-                    if (model.LostDetailedPlace.Length > 100)
-                    {
-                        ModelState.AddModelError("LostDetailedPlace", "紛失物は100文字以内で入力してください。");
-                    }
-                }
-
-                if (ModelState.IsValid)
-                {
-                    
-                    lostDao.InsertLost(model);
+                    ModelState.AddModelError("LostDate", "紛失日には正しい日付を入力してください。");
                 }
             }
-            return RedirectToAction("Index", model);
-            //return View(lost);
+
+            if (model.FoundDate.HasValue)
+            {
+                if (!DateTime.TryParse(model.FoundDate.ToString(), out DateTime FoundDate))
+                {
+                    ModelState.AddModelError("FoundDate", "紛失日には正しい日付を入力してください。");
+                }
+            }
+
+            if (!String.IsNullOrEmpty(model.LostItem))
+            {
+                if (model.LostItem.Length > 100)
+                {
+                    ModelState.AddModelError("LostItem", "紛失物は100文字以内で入力してください。");
+                }
+            }
+
+            if (!String.IsNullOrEmpty(model.LostPlace))
+            {
+                if (model.LostPlace.Length > 100)
+                {
+                    ModelState.AddModelError("LostPlace", "紛失物は100文字以内で入力してください。");
+                }
+            }
+
+            if (!String.IsNullOrEmpty(model.LostDetailedPlace))
+            {
+                if (model.LostDetailedPlace.Length > 100)
+                {
+                    ModelState.AddModelError("LostDetailedPlace", "紛失物は100文字以内で入力してください。");
+                }
+            }
+
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).Where(s => !string.IsNullOrEmpty(s)).ToList();
+                model.Message = string.Join(" ", errors);
+                // 検索フォームの表示用データを準備（現在のモデル値を反映）
+                ViewData["InsertModel"] = model;
+                ViewData["SearchModel"] = new LostDto
+                {
+                    UserId = model.UserId,
+                    LostDate = model.LostDate,
+                    FoundDate = model.FoundDate,
+                    LostItem = model.LostItem,
+                    LostPlace = model.LostPlace,
+                    LostDetailedPlace = model.LostDetailedPlace
+                };
+
+                var list = lostDao.GetLostList(model);
+
+                return View("Index", list);
+
+            }
+
+            lostDao.InsertLost(model);
+            
+            return RedirectToAction("Index");
+            //return View(model);
         }
 
         // POST: Losts/Edit/5

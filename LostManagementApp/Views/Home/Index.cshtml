@@ -1,6 +1,8 @@
 ﻿@model IEnumerable<LostManagementApp.Models.Lost>
 @{
     var search = ViewData["SearchModel"] as LostManagementApp.Models.LostDto ?? new LostManagementApp.Models.LostDto();
+    var insertModel = ViewData["InsertModel"] as LostManagementApp.ViewModels.LostViewModel;
+    var searchMessage = ViewData["SearchMessage"] as string;
 }
 
 <h2>紛失物一覧／検索</h2>
@@ -10,15 +12,23 @@
     @Html.AntiForgeryToken()
 }
 
+@if (!string.IsNullOrEmpty(insertModel?.Message))
+{
+    <div class="alert alert-danger">@insertModel.Message</div>
+}
+
+@if (!string.IsNullOrEmpty(searchMessage))
+{
+    <div class="alert alert-danger">@searchMessage</div>
+}
+
 <!-- 検索フォーム（C# サーバーサイドで処理） -->
-<!-- form asp-action="Index" method="post" class="mb-3" -->
 <form action="@Url.Action("Index", "Home")" method="post">
     @Html.AntiForgeryToken()
     <div asp-validation-summary="All" class="text-danger"></div>
     
     <div>
         <label>ユーザーID</label>
-        <!-- span class="text-danger d-none fw-bold" asp-validation-for=""></!-->
         @Html.ValidationMessageFor(model => search.UserId, "", new { @class = "text-danger" })
         <input type="number" name="UserId" value="@(search.UserId)" class="form-control" />
     </div>
