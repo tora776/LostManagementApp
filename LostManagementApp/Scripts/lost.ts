@@ -23,16 +23,29 @@
     Message: string | null;
 }
 
-// 紛失物新規登録時のエラーチェック
-function InsertButton() {
-    let errorMessage = InsertErrorCheck();
-    //document.getElementById("insertLost").innerHTML = InsertErrorCheck();
-    if (errorMessage == "") {
+// 初期設定
+// エラーメッセージ非表示
+let insertError = document.getElementById("insert-front-error");
+insertError.style.display = "none";
 
-    } else {
-        document.getElementById("insert-front-error").textContent = errorMessage;
+let searchError = document.getElementById("search-front-error");
+searchError.style.display = "none";
+
+// 登録ボタン押下時のエラーチェック
+let insertButton = document.getElementById("insert-button");
+insertButton?.addEventListener("click", function () {
+    let insertError = document.getElementById("insert-front-error");
+    // 初期化
+    insertError.textContent = "";
+    insertError.style.display = "none";
+    // エラーチェック
+    let errorMessage = InsertErrorCheck();
+    if (errorMessage != "") {
+        insertError.textContent = errorMessage;
+        insertError.style.display = "block";
+        event.preventDefault();
     }
-}
+});
 
 function InsertErrorCheck() {
     let errorMessaage: string = "";
