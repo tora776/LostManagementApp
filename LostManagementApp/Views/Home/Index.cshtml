@@ -4,6 +4,7 @@
     var insertModel = ViewData["InsertModel"] as LostManagementApp.ViewModels.LostViewModel;
     var searchMessage = ViewData["SearchMessage"] as string;
 }
+<script src="~/js/lost.js"></script>
 
 <h2>紛失物一覧／検索</h2>
 
@@ -14,14 +15,15 @@
 
 @if (!string.IsNullOrEmpty(insertModel?.Message))
 {
-    <div class="alert alert-danger">@insertModel.Message</div>
+    <div class="alert alert-danger" id="insert-server-error">@insertModel.Message</div>
 }
+<div class="alert alert-danger" id="insert-front-error"></div>
 
 @if (!string.IsNullOrEmpty(searchMessage))
 {
-    <div class="alert alert-danger">@searchMessage</div>
+    <div class="alert alert-danger" id="search-server-error">@searchMessage</div>
 }
-
+<div class="alert alert-danger" id="search-front-error"></div>
 <!-- 検索フォーム（C# サーバーサイドで処理） -->
 <form action="@Url.Action("Index", "Home")" method="post">
     @Html.AntiForgeryToken()
@@ -30,36 +32,38 @@
     <div>
         <label>ユーザーID</label>
         @Html.ValidationMessageFor(model => search.UserId, "", new { @class = "text-danger" })
-        <input type="number" name="UserId" value="@(search.UserId)" class="form-control" />
+        <input type="number" id="UserId" name="UserId" value="@(search.UserId)" class="form-control" />
     </div>
     <div>
         <label>なくした日</label>
         @Html.ValidationMessageFor(model => search.LostDate, "", new { @class = "text-danger" })
-        <input type="date" name="LostDate" value="@(search.LostDate?.ToString("yyyy-MM-dd"))" class="form-control" />
+        <input type="date" id="LostDate" name="LostDate" value="@(search.LostDate?.ToString("yyyy-MM-dd"))" class="form-control" />
     </div>
     <div>
         <label>発見日</label>
         @Html.ValidationMessageFor(model => search.FoundDate, "", new { @class = "text-danger" })
-        <input type="date" name="FoundDate" value="@(search.FoundDate?.ToString("yyyy-MM-dd"))" class="form-control" />
+        <input type="date" id="FoundDate" name="FoundDate" value="@(search.FoundDate?.ToString("yyyy-MM-dd"))" class="form-control" />
     </div>
     <div>
         <label>なくしたもの</label>
         @Html.ValidationMessageFor(model => search.LostItem, "", new { @class = "text-danger" })
-        <input type="text" name="LostItem" value="@(search.LostItem ?? "")" class="form-control" />
+        <input type="text" id="LostItem" name="LostItem" value="@(search.LostItem ?? "")" class="form-control" />
     </div>
     <div>
         <label>なくした場所</label>
         @Html.ValidationMessageFor(model => search.LostPlace, "", new { @class = "text-danger" })
-        <input type="text" name="LostPlace" value="@(search.LostPlace ?? "")" class="form-control" />
+        <input type="text" id="LostPlace" name="LostPlace" value="@(search.LostPlace ?? "")" class="form-control" />
     </div>
     <div>
         <label>詳細な場所</label>
         @Html.ValidationMessageFor(model => search.LostDetailedPlace, "", new { @class = "text-danger" })
-        <input type="text" name="LostDetailedPlace" value="@(search.LostDetailedPlace ?? "")" class="form-control" />
+        <input type="text" id="LostDetailedPlace" name="LostDetailedPlace" value="@(search.LostDetailedPlace ?? "")" class="form-control" />
     </div>
     <button type="submit" class="btn btn-primary mt-2">検索</button>
     <!-- a asp-action="GetInsert" class="btn btn-success mt-2"-->
-    <button type="submit" formaction="@Url.Action("Insert", "Home")" class="btn btn-success mt-2">新規登録</button>
+    <div id="insertLost">
+        <button type="submit" onclick="InsertButton()" formaction="@Url.Action("Insert", "Home")" class="btn btn-success mt-2">新規登録</button>
+    </div>
 </form>
 
 <!-- 検索結果テーブル + 複数削除フォーム -->
@@ -101,3 +105,9 @@
 
     <button type="submit" class="btn btn-danger">選択削除</button>
 </form>
+<div id="ts-example">
+    <br />
+    <button type="button" class="btn btn-primary btn-md" onclick="TSButton()">
+        Click Me
+    </button>
+</div>
