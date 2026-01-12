@@ -12,14 +12,29 @@ insertButton === null || insertButton === void 0 ? void 0 : insertButton.addEven
     insertError.textContent = "";
     insertError.style.display = "none";
     // エラーチェック
-    let errorMessage = InsertErrorCheck();
+    let errorMessage = InputErrorCheck();
     if (errorMessage != "") {
         insertError.textContent = errorMessage;
         insertError.style.display = "block";
         event.preventDefault();
     }
 });
-function InsertErrorCheck() {
+// 登録ボタン押下時のエラーチェック
+let searchButton = document.getElementById("search-button");
+searchButton === null || searchButton === void 0 ? void 0 : searchButton.addEventListener("click", function () {
+    let searchError = document.getElementById("search-front-error");
+    // 初期化
+    searchError.textContent = "";
+    searchError.style.display = "none";
+    // エラーチェック
+    let errorMessage = InputErrorCheck();
+    if (errorMessage != "") {
+        searchError.textContent = errorMessage;
+        searchError.style.display = "block";
+        event.preventDefault();
+    }
+});
+function InputErrorCheck() {
     let errorMessaage = "";
     let lostDate = document.getElementById("LostDate").value;
     if (lostDate != "") {
