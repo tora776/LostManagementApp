@@ -31,6 +31,8 @@ insertError.style.display = "none";
 let searchError = document.getElementById("search-front-error");
 searchError.style.display = "none";
 
+
+
 // 登録ボタン押下時のエラーチェック
 let insertButton = document.getElementById("insert-button");
 insertButton?.addEventListener("click", function () {
