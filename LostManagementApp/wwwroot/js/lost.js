@@ -12,7 +12,7 @@ insertButton === null || insertButton === void 0 ? void 0 : insertButton.addEven
     insertError.textContent = "";
     insertError.style.display = "none";
     // エラーチェック
-    let errorMessage = InputErrorCheck();
+    let errorMessage = IndexInputErrorCheck();
     if (errorMessage != "") {
         insertError.textContent = errorMessage;
         insertError.style.display = "block";
@@ -27,14 +27,14 @@ searchButton === null || searchButton === void 0 ? void 0 : searchButton.addEven
     searchError.textContent = "";
     searchError.style.display = "none";
     // エラーチェック
-    let errorMessage = InputErrorCheck();
+    let errorMessage = IndexInputErrorCheck();
     if (errorMessage != "") {
         searchError.textContent = errorMessage;
         searchError.style.display = "block";
         event.preventDefault();
     }
 });
-function InputErrorCheck() {
+function IndexInputErrorCheck() {
     let errorMessaage = "";
     let lostDate = document.getElementById("LostDate").value;
     if (lostDate != "") {

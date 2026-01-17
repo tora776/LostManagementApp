@@ -24,49 +24,55 @@
 }
 
 // 初期設定
-// エラーメッセージ非表示
-let insertError = document.getElementById("insert-front-error");
-insertError.style.display = "none";
+document.addEventListener("DOMContentLoaded", () => {
+    // エラーメッセージ非表示
+    let updateError = document.getElementById("update-front-error");
+    updateError.style.display = "none";
 
-let searchError = document.getElementById("search-front-error");
-searchError.style.display = "none";
+    let deleteError = document.getElementById("delete-front-error");
+    deleteError.style.display = "none";
+});
 
-
-
-// 登録ボタン押下時のエラーチェック
-let insertButton = document.getElementById("insert-button");
-insertButton?.addEventListener("click", function () {
-    let insertError = document.getElementById("insert-front-error");
+// 更新ボタン押下時のエラーチェック
+let updateButton = document.getElementById("update-button");
+updateButton?.addEventListener("click", function () {
+    let updateError = document.getElementById("update-front-error");
     // 初期化
-    insertError.textContent = "";
-    insertError.style.display = "none";
+    updateError.textContent = "";
+    updateError.style.display = "none";
     // エラーチェック
-    let errorMessage = IndexInputErrorCheck();
+    let errorMessage = DetailInputErrorCheck();
     if (errorMessage != "") {
-        insertError.textContent = errorMessage;
-        insertError.style.display = "block";
+        updateError.textContent = errorMessage;
+        updateError.style.display = "block";
         event.preventDefault();
     }
 });
 
-// 登録ボタン押下時のエラーチェック
-let searchButton = document.getElementById("search-button");
-searchButton?.addEventListener("click", function () {
-    let searchError = document.getElementById("search-front-error");
+// 削除ボタン押下時のエラーチェック
+let deleteButton = document.getElementById("delete-button");
+deleteButton?.addEventListener("click", function () {
+    let deleteError = document.getElementById("delete-front-error");
     // 初期化
-    searchError.textContent = "";
-    searchError.style.display = "none";
+    deleteError.textContent = "";
+    deleteError.style.display = "none";
     // エラーチェック
-    let errorMessage = IndexInputErrorCheck();
+    let errorMessage = DetailInputErrorCheck();
     if (errorMessage != "") {
-        searchError.textContent = errorMessage;
-        searchError.style.display = "block";
+        deleteError.textContent = errorMessage;
+        deleteError.style.display = "block";
         event.preventDefault();
     }
 });
 
-function IndexInputErrorCheck() {
+function DetailInputErrorCheck() {
     let errorMessaage: string = "";
+
+    let lostId = (<HTMLInputElement>document.getElementById("LostId")).value;
+    if (lostId == "") {
+        errorMessaage += "・紛失IDが不正です。\n";
+    }
+
     let lostDate = (<HTMLInputElement>document.getElementById("LostDate")).value;
     if (lostDate != "") {
         if (isNaN(Date.parse(lostDate))) {
@@ -110,28 +116,3 @@ function IndexInputErrorCheck() {
 
     return errorMessaage;
 }
-
-
-/// ハンズオン時のサンプルコード　削除予定
-function TSButton() {
-    let name: string = "Fred";
-    document.getElementById("ts-example").innerHTML = greeter(user);
-}
-
-class Student {
-    fullName: string;
-    constructor(public firstName: string, public middleInitial: string, public lastName: string) {
-        this.fullName = firstName + " " + middleInitial + " " + lastName;
-    }
-}
-
-interface Person {
-    firstName: string;
-    lastName: string;
-}
-
-function greeter(person: Person) {
-    return "Hello, " + person.firstName + " " + person.lastName;
-}
-
-let user = new Student("Fred", "M.", "Smith");
