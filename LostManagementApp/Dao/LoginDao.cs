@@ -130,5 +130,24 @@ namespace LostManagementApp.Dao
                 Console.WriteLine("Error updating token expire date: " + ex.Message);
             }
         }
+
+        public string? Authenticate(string userId, string password)
+        {
+            var user = GetUser(userId, password);
+            if (user.UserId == -1) return null;
+
+            var token = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
+            var now = DateTime.UtcNow;
+            var expire = now.AddMinutes(30);
+
+            SaveLoginToken(user.UserId, token, now, expire);
+            return token;
+        }
+
+        public bool IsTokenValid(string token)
+        {
+            var login = GetLoginByToken(token);
+            return login != null && login.ExpireDate > DateTime.UtcNow;
+        }
     }
 }

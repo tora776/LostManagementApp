@@ -28,7 +28,7 @@ namespace LostManagementApp.Controllers
         // GET: Losts
         [HttpGet]
         public IActionResult Index()
-        { 
+        {
             //TODO:ユーザーIDを取得する
             //LostDto lostDto = new LostDto
             LostViewModel model = new LostViewModel
@@ -132,7 +132,7 @@ namespace LostManagementApp.Controllers
             }
 
             lostDao.InsertLost(model);
-            
+
             return RedirectToAction("Index");
             //return View(model);
         }
@@ -156,7 +156,7 @@ namespace LostManagementApp.Controllers
                     if (!LostExists(lost.LostId)) return NotFound();
                     else throw;
                 }
-                return RedirectToAction("Detail", new { id = lost.LostId});
+                return RedirectToAction("Detail", new { id = lost.LostId });
             }
             // TODO:失敗時の処理
             return RedirectToAction("Detail", new { id = lost.LostId });
@@ -182,11 +182,60 @@ namespace LostManagementApp.Controllers
             lostDao.DeleteLost(id);
             return RedirectToAction(nameof(Index));
         }
-        
+
         private bool LostExists(int id)
         {
             return _context.Lost.Any(e => e.LostId == id);
         }
-        
+
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        //    [HttpPost("authenticate")]
+        //    public IActionResult Authenticate([FromBody] LoginRequest request)
+        //    {
+        //        try
+        //        {
+        //            var token = _context.Authenticate(request.UserId, request.Password);
+        //            if (token == null)
+        //            {
+        //                return Unauthorized();
+        //            }
+
+        //            return Json(new { token });
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            // ログ出力などのエラーハンドリングをここで行う
+
+        //            // ここで例外内容をログに出力
+        //            Console.WriteLine("Authenticate error: " + ex.ToString());
+        //            return StatusCode(500, "Internal server error");
+        //        }
+        //    }
+
+        //    [HttpPost("checktoken")]
+        //    public IActionResult CheckToken([FromBody] TokenRequest request)
+        //    {
+        //        if (!_context.IsTokenValid(request.Token))
+        //            return Unauthorized();
+
+        //        return Ok();
+        //    }
+        //}
+
+        //public class LoginRequest
+        //{
+        //    public required string UserId { get; set; }
+        //    public required string Password { get; set; }
+        //}
+
+        //public class TokenRequest
+        //{
+        //    public required string Token { get; set; }
+        //}
     }
 }
+

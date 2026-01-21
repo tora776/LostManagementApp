@@ -1,33 +1,31 @@
-﻿using LostManagementApp.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using LostManagementApp.Dao;
 using LostManagementApp.DatabaseContext;
+using LostManagementApp.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace LostManagementApp.Controllers
 {
-    [Route("[controller]")]
-    [ApiController]
     public class LoginController : Controller
     {
         private readonly LostContext _context;
+        private readonly LoginDao loginDao;
 
         public LoginController(LostContext LostContext)
         {
             _context = LostContext;
+            loginDao = new LoginDao(_context);
         }
-        /*
-        // [HttpGet("index")]
+        
         public IActionResult Index()
         {
-            return View("~/Views/Login/Index.cshtml");
-            //return View("Login");
+            return View();
         }
 
-        [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody] LoginRequest request)
         {
             try
             {
-                var token = _context.Authenticate(request.UserId, request.Password);
+                var token = loginDao.Authenticate(request.UserId, request.Password);
                 if (token == null)
                 {
                     return Unauthorized();
@@ -45,10 +43,9 @@ namespace LostManagementApp.Controllers
             }
         }
 
-        [HttpPost("checktoken")]
         public IActionResult CheckToken([FromBody] TokenRequest request)
         {
-            if (!_context.IsTokenValid(request.Token))
+            if (!loginDao.IsTokenValid(request.Token))
                 return Unauthorized();
 
             return Ok();
@@ -64,7 +61,5 @@ namespace LostManagementApp.Controllers
     public class TokenRequest
     {
         public required string Token { get; set; }
-    }
-        */
     }
 }

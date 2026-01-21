@@ -87,6 +87,7 @@ namespace LostManagementApp.Dao
             //lost.UpdateDate = DateTime.UtcNow;
             //// LostIdの最大値 + 1を取得
             //lost.LostId = GetMaxLostId();
+
             DateTime lostDateValue = model.LostDate ?? DateTime.MinValue;
             DateTime foundDateValue = model.FoundDate ?? DateTime.MinValue;
 
