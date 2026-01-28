@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (response.ok) {
             const data = yield response.json();
             localStorage.setItem("authToken", data.token);
-            window.location.href = "/Home/Lost";
+            window.location.href = "/Home/Index";
         }
         else {
             document.getElementById("loginError").style.display = "block";

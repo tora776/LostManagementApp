@@ -54,6 +54,7 @@ namespace LostManagementApp.Dao
             {
                 _context.Login.Add(new Login
                 {
+                    LoginId = GetMaxLoginId(),
                     UserId = userId,
                     Token = token,
                     LoginDate = loginDate,
@@ -149,5 +150,16 @@ namespace LostManagementApp.Dao
             var login = GetLoginByToken(token);
             return login != null && login.ExpireDate > DateTime.UtcNow;
         }
+
+        /// <summary>
+        /// 紛失IDの最大値を取得する
+        /// </summary>
+        public int GetMaxLoginId()
+        {
+            int maxLoginId = _context.Login
+                .Select(x => x.LoginId).Max();
+            return maxLoginId + 1;
+        }
+
     }
 }

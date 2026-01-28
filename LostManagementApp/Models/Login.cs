@@ -32,6 +32,10 @@ namespace LostManagementApp.Models
         /// </summary>
         [Column("expire_date")]
         public DateTime ExpireDate { get; set; }
+
+        // ナビゲーションプロパティ
+        [ForeignKey("UserId")]
+        public Users? User { get; set; }
     }
 }
 
