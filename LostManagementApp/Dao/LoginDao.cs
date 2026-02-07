@@ -132,11 +132,8 @@ namespace LostManagementApp.Dao
             }
         }
 
-        public string? Authenticate(string userId, string password)
+        public string? Authenticate(Users user)
         {
-            var user = GetUser(userId, password);
-            if (user.UserId == -1) return null;
-
             var token = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
             var now = DateTime.UtcNow;
             var expire = now.AddMinutes(30);

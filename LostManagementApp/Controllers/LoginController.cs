@@ -21,17 +21,32 @@ namespace LostManagementApp.Controllers
             return View();
         }
 
-        public IActionResult Authenticate([FromBody] LoginRequest request)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Authenticate([Bind("UserId,Password")] LoginRequest request)
+        //public IActionResult Authenticate([FromBody] LoginRequest request)
         {
             try
             {
-                var token = loginDao.Authenticate(request.UserId, request.Password);
+                var user = loginDao.GetUser(request.UserId, request.Password);
+
+                if (user.UserId == -1)
+                {
+                    return Unauthorized();
+                }
+                var token = loginDao.Authenticate(user);
                 if (token == null)
                 {
                     return Unauthorized();
                 }
 
-                return Json(new { token });
+                if (!loginDao.IsTokenValid(token))
+                {
+                    return Unauthorized();
+                }
+
+                //return Json(new { token });
+                return RedirectToAction("Index", "Home", new { UserId = user.UserId });
             }
             catch (Exception ex)
             {

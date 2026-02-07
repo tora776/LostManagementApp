@@ -1,26 +1,22 @@
-﻿@model IEnumerable<LostManagementApp.Models.Login>
-@{
-    // TODO:LoginViewModelを作成し、エラーメッセージ等を受け取る
-    // var loginModel = ViewData["LoginModel"] as LostManagementApp.Models.Login;
-}
+﻿@model IEnumerable<LostManagementApp.Models.Users> 
 
 @{
     ViewData["Title"] = "Home Page";
 }
 
-<script src="~/js/login.js"></script>
 <h2>ログイン</h2>
 <div>
-    <form id="loginForm">
+    <form action="@Url.Action("Authenticate", "Login")" method="post">
+        @Html.AntiForgeryToken()
         <div>
             <label for="userId">ユーザーID:</label>
-            <input type="text" id="userId" name="userId" required />
+            <input type="text" id="UserId" name="UserId" class="form-control" required />
         </div>
         <div>
             <label for="password">パスワード:</label>
-            <input type="password" id="password" name="password" required />
+            <input type="password" id="Password" name="Password" class="form-control" required />
         </div>
-        <button type="submit">ログイン</button>
+        <button type="submit" id="login-button" class="btn btn-primary mt-2">ログイン</button>
     </form>
     <div id="loginError" style="color:red;display:none;">ログインに失敗しました。</div>
 </div>

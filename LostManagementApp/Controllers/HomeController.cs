@@ -27,13 +27,14 @@ namespace LostManagementApp.Controllers
 
         // GET: Losts
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Index(string UserId)
         {
+            int.TryParse(UserId, out int result);
             //TODO:ÉÜÅ[ÉUÅ[IDÇéÊìæÇ∑ÇÈ
             //LostDto lostDto = new LostDto
             LostViewModel model = new LostViewModel
             {
-                UserId = 1,
+                UserId = result,
                 LostDate = null,
                 FoundDate = null,
                 LostItem = "",
