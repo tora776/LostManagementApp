@@ -1,6 +1,7 @@
 ﻿using LostManagementApp.Dao;
 using LostManagementApp.DatabaseContext;
-using LostManagementApp.Models;
+using LostManagementApp.ViewModels;
+using LostManagementApp.Utils;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LostManagementApp.Controllers
@@ -18,30 +19,31 @@ namespace LostManagementApp.Controllers
         
         public IActionResult Index()
         {
+            if (TempData["ErrorMessage"] != null)
+            {
+                ViewData["ErrorMessage"] = TempData["ErrorMessage"];
+            }
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Authenticate([Bind("UserId,Password")] LoginRequest request)
-        //public IActionResult Authenticate([FromBody] LoginRequest request)
+        public IActionResult Authenticate([Bind("UserId,Password")] LoginViewModel model)
         {
             try
             {
-                var user = loginDao.GetUser(request.UserId, request.Password);
+                var user = loginDao.GetUser(model.UserId, model.Password);
 
                 if (user.UserId == -1)
                 {
-                    //TODO: ログイン失敗の理由をユーザーに伝える方法を検討する（例：ユーザー名が存在しない、パスワードが間違っているなど）
+                    TempData["ErrorMessage"] = ErrorMessages.MSG_006;
                     return RedirectToAction("Index", "Login");
-                    //return Unauthorized();
                 }
                 var token = loginDao.Authenticate(user);
                 if (token == null)
                 {
-                    //TODO: ログイン失敗の理由をユーザーに伝える方法を検討する（例：ユーザー名が存在しない、パスワードが間違っているなど）
+                    TempData["ErrorMessage"] = ErrorMessages.MSG_006;
                     return RedirectToAction("Index", "Login");
-                    //return Unauthorized();
                 }
 
                 if (!loginDao.IsTokenValid(token))
@@ -50,6 +52,7 @@ namespace LostManagementApp.Controllers
                 }
 
                 //return Json(new { token });
+                // TODO:トークンを渡して認証状態を管理したほうがよい？
                 return RedirectToAction("Index", "Home", new { UserId = user.UserId });
             }
             catch (Exception ex)
@@ -71,11 +74,11 @@ namespace LostManagementApp.Controllers
         }
     }
 
-    public class LoginRequest
-    {
-        public required string UserId { get; set; }
-        public required string Password { get; set; }
-    }
+    //public class LoginRequest
+    //{
+    //    public required string UserId { get; set; }
+    //    public required string Password { get; set; }
+    //}
 
     public class TokenRequest
     {

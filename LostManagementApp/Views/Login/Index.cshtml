@@ -1,10 +1,17 @@
-﻿@model IEnumerable<LostManagementApp.Models.Users> 
+﻿@* @model IEnumerable<LostManagementApp.Models.Users>  *@
+@model IEnumerable<LostManagementApp.ViewModels.LoginViewModel> 
 
 @{
-    ViewData["Title"] = "Home Page";
+    var model = ViewData["LoginModel"] as LostManagementApp.ViewModels.LoginViewModel ?? new LostManagementApp.ViewModels.LoginViewModel { UserId= "test", Password="test" };
+    var message = ViewData["ErrorMessage"] as string;
 }
 
 <h2>ログイン</h2>
+@if (!string.IsNullOrEmpty(message))
+{
+    <div class="alert alert-danger" id="insert-server-error">@message</div>
+}
+
 <div>
     <form action="@Url.Action("Authenticate", "Login")" method="post">
         @Html.AntiForgeryToken()
