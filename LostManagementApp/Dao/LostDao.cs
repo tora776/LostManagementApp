@@ -159,5 +159,16 @@ namespace LostManagementApp.Dao
                 .Select(x => x.LostId).Max();
             return maxLostId + 1;
         }
+
+        /// <summary>
+        /// トークンからユーザーIDを取得する
+        /// </summary>
+        public int GetUserId(string token)
+        {
+            var login = _context.Login
+                .FirstOrDefault(x => x.Token == token);
+
+            return login?.UserId ?? -1;
+        }
     }
 }

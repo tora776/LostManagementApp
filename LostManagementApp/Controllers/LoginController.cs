@@ -53,7 +53,8 @@ namespace LostManagementApp.Controllers
 
                 //return Json(new { token });
                 // TODO:トークンを渡して認証状態を管理したほうがよい？
-                return RedirectToAction("Index", "Home", new { UserId = user.UserId });
+                //return RedirectToAction("Index", "Home", new { UserId = user.UserId });
+                return RedirectToAction("Index", "Home", new { Token = token });
             }
             catch (Exception ex)
             {

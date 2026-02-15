@@ -27,14 +27,19 @@ namespace LostManagementApp.Controllers
 
         // GET: Losts
         [HttpGet]
-        public IActionResult Index(string UserId)
+        public IActionResult Index(string Token)
         {
-            int.TryParse(UserId, out int result);
-            //TODO:ユーザーIDを取得する
-            //LostDto lostDto = new LostDto
+            // トークンからユーザーIDを取得
+            int userId = lostDao.GetUserId(Token);
+            if (userId == -1)
+            {
+                // トークンが無効な場合の処理（例: ログインページへリダイレクト）
+                TempData["ErrorMessage"] = ErrorMessages.MSG_002;
+                return RedirectToAction("Index", "Login");
+            }
             LostViewModel model = new LostViewModel
             {
-                UserId = result,
+                UserId = userId,
                 LostDate = null,
                 FoundDate = null,
                 LostItem = "",
