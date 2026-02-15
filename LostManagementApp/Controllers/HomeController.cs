@@ -33,7 +33,7 @@ namespace LostManagementApp.Controllers
             int userId = lostDao.GetUserId(Token);
             if (userId == -1)
             {
-                // トークンが無効な場合の処理（例: ログインページへリダイレクト）
+                // トークンが無効な場合、ログインページにリダイレクトしてエラーメッセージを表示
                 TempData["ErrorMessage"] = ErrorMessages.MSG_002;
                 return RedirectToAction("Index", "Login");
             }
@@ -47,7 +47,6 @@ namespace LostManagementApp.Controllers
                 LostDetailedPlace = ""
             };
             var list = lostDao.GetLostList(model);
-            //ViewData["SearchModel"] = new LostDto();
             ViewData["SearchModel"] = model;
             return View(list);
         }
