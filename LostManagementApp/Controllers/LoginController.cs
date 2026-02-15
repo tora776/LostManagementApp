@@ -32,12 +32,16 @@ namespace LostManagementApp.Controllers
 
                 if (user.UserId == -1)
                 {
-                    return Unauthorized();
+                    //TODO: ログイン失敗の理由をユーザーに伝える方法を検討する（例：ユーザー名が存在しない、パスワードが間違っているなど）
+                    return RedirectToAction("Index", "Login");
+                    //return Unauthorized();
                 }
                 var token = loginDao.Authenticate(user);
                 if (token == null)
                 {
-                    return Unauthorized();
+                    //TODO: ログイン失敗の理由をユーザーに伝える方法を検討する（例：ユーザー名が存在しない、パスワードが間違っているなど）
+                    return RedirectToAction("Index", "Login");
+                    //return Unauthorized();
                 }
 
                 if (!loginDao.IsTokenValid(token))

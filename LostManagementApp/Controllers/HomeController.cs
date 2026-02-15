@@ -42,7 +42,8 @@ namespace LostManagementApp.Controllers
                 LostDetailedPlace = ""
             };
             var list = lostDao.GetLostList(model);
-            ViewData["SearchModel"] = new LostDto();
+            //ViewData["SearchModel"] = new LostDto();
+            ViewData["SearchModel"] = model;
             return View(list);
         }
 

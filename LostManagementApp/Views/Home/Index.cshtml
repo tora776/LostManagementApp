@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<LostManagementApp.Models.Lost>
 @{
-    var search = ViewData["SearchModel"] as LostManagementApp.Models.LostDto ?? new LostManagementApp.Models.LostDto();
+    // var search = ViewData["SearchModel"] as LostManagementApp.Models.LostDto ?? new LostManagementApp.Models.LostDto();
+    var search = ViewData["SearchModel"] as LostManagementApp.ViewModels.LostViewModel ?? new LostManagementApp.ViewModels.LostViewModel();
     var insertModel = ViewData["InsertModel"] as LostManagementApp.ViewModels.LostViewModel;
     var searchMessage = ViewData["SearchMessage"] as string;
 }
